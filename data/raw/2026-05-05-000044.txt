@@ -1,6 +1,0 @@
-2026-05-05 | great session
-Bench press: 87.5x8, 87.5x8, 87.5x8, 87.5x7
-Overhead press: 55.0x9, 55.0x9, 55.0x9
-Barbell row: 80.0x7, 80.0x7, 80.0x7, 80.0x7
-Bicep curl: 12x9, 12x9, 12x9
-Tricep pushdown: 25.0x8, 25.0x8, 25.0x8

@@ -1,6 +1,0 @@
-2026-03-03
-Bench press: 82.5x6, 82.5x6, 82.5x6, 82.5x6
-Overhead press: 47.5x9, 47.5x9, 47.5x9
-Barbell row: 75.0x7, 75.0x7, 75.0x7, 75.0x7
-Bicep curl: 8x9, 8x9, 8x8
-Tricep pushdown: 20x10, 20x10, 20x10

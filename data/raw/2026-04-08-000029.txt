@@ -1,5 +1,0 @@
-2026-04-08 | new leg press weight
-Squat: 105.0x7, 105.0x7, 105.0x7, 105.0x6
-Romanian deadlift: 87.5x8, 87.5x8, 87.5x8
-Leg press: 130x8, 130x8, 130x8
-Calf raise: 65x14, 65x14, 65x14, 65x13

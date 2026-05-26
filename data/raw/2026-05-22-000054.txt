@@ -1,6 +1,0 @@
-2026-05-22 | PB on row
-Bench press: 90.0x7, 90.0x7, 90.0x7, 90.0x6
-Overhead press: 57.5x8, 57.5x8, 57.5x8
-Barbell row: 80.0x10, 80.0x10, 80.0x10, 80.0x9
-Bicep curl: 12x13, 12x13, 12x11
-Tricep pushdown: 25.0x11, 25.0x11, 25.0x11

@@ -1,6 +1,0 @@
-2026-03-06 | new bench weight today
-Bench press: 82.5x6, 82.5x6, 82.5x6, 82.5x6
-Overhead press: 50.0x6, 50.0x6, 50.0x6
-Barbell row: 75.0x8, 75.0x8, 75.0x8, 75.0x7
-Bicep curl: 8x10, 8x10, 8x10
-Tricep pushdown: 20x11, 20x11, 20x11

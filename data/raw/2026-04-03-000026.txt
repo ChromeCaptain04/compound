@@ -1,6 +1,0 @@
-2026-04-03 | deload week feel
-Bench press: 85.0x6, 85.0x6, 85.0x6, 85.0x6
-Overhead press: 52.5x6, 52.5x6, 52.5x6
-Barbell row: 77.5x7, 77.5x7, 77.5x7, 77.5x7
-Bicep curl: 10x8, 10x8, 10x8
-Tricep pushdown: 22.5x9, 22.5x9, 22.5x8

@@ -1,6 +1,0 @@
-2026-04-10 | solid session
-Bench press: 85.0x8, 85.0x8, 85.0x8, 85.0x7
-Overhead press: 52.5x8, 52.5x8, 52.5x8
-Barbell row: 77.5x10, 77.5x10, 77.5x10, 77.5x8
-Bicep curl: 10x11, 10x11, 10x11
-Tricep pushdown: 22.5x12, 22.5x12, 22.5x12

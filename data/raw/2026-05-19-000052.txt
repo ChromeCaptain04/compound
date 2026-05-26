@@ -1,6 +1,0 @@
-2026-05-19 | slight elbow tweak on curls
-Bench press: 90.0x7, 90.0x7, 90.0x7, 90.0x7
-Overhead press: 57.5x7, 57.5x7, 57.5x6
-Barbell row: 80.0x9, 80.0x9, 80.0x9, 80.0x7
-Bicep curl: 12x12, 12x12, 12x12
-Tricep pushdown: 25.0x11, 25.0x11, 25.0x10

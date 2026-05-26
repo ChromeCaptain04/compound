@@ -1,6 +1,0 @@
-2026-04-14 | felt strong
-Bench press: 85.0x9, 85.0x9, 85.0x9, 85.0x7
-Overhead press: 52.5x9, 52.5x9, 52.5x7
-Barbell row: 77.5x10, 77.5x10, 77.5x10, 77.5x8
-Bicep curl: 10x12, 10x12, 10x12
-Tricep pushdown: 22.5x13, 22.5x13, 22.5x13

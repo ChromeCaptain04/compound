@@ -1,6 +1,0 @@
-2026-03-24 | strong day
-Bench press: 82.5x8, 82.5x8, 82.5x8, 82.5x6
-Overhead press: 50.0x8, 50.0x8, 50.0x7
-Barbell row: 75.0x10, 75.0x10, 75.0x10, 75.0x10
-Bicep curl: 8x12, 8x12, 8x10
-Tricep pushdown: 22.5x8, 22.5x8, 22.5x8
