@@ -892,6 +892,11 @@
       <div style="margin-top:2.5rem; border-top:1px solid var(--border); padding-top:1.5rem;">
         <div class="section-title">System</div>
         <div style="font-size:0.83rem;color:var(--muted);line-height:1.6;margin-bottom:1rem;">
+          Re-read all raw text files and refresh every tab. Use after changing aliases or if the data looks wrong.
+        </div>
+        <button class="btn-sm danger" onclick="triggerReprocess()">Reprocess Archives</button>
+        <div class="status-msg" id="reprocess-status"></div>
+        <div style="font-size:0.83rem;color:var(--muted);line-height:1.6;margin:1.25rem 0 0.75rem;">
           Clear saved credentials and return to the login screen.
         </div>
         <button class="btn-sm danger" onclick="resetConfig()">Reconfigure</button>
@@ -965,7 +970,7 @@
     // GitHub API helpers
     const API = () => `https://api.github.com/repos/${CFG.user}/${CFG.repo}`;
     const HDR = () => ({ 'Authorization': `token ${CFG.token}`, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' });
-    const b64d = s => decodeURIComponent(escape(atob(s.replace(/\n/g, ''))));
+    const b64d = s => new TextDecoder().decode(Uint8Array.from(atob(s.replace(/\n/g, '')), ch => ch.charCodeAt(0)));  // robust UTF-8
     const b64e = s => btoa(unescape(encodeURIComponent(s)));
 
     async function ghGet(path) {
@@ -1154,19 +1159,39 @@
       document.getElementById('dash-content').innerHTML = `<div class="loading">Fetching archives…</div>`;
 
       try {
-        // 1. Get directory listing via GitHub Contents API (needs auth, returns metadata + download_url)
+        // 1. Use the Git Tree API (recursive) to list all files under data/raw/.
+        //    Unlike the Contents API, this has no 1,000-item cap, so it scales
+        //    to arbitrarily large archives without silently dropping entries.
         let rawFiles = [];
         try {
-          const listing = await ghGet('data/raw');
-          rawFiles = Array.isArray(listing) ? listing.filter(f => f.name.endsWith('.txt')) : [];
-        } catch (e) { /* folder doesn't exist yet — first run */ }
+          const branch = CFG.branch || 'main';
+          // Get the branch SHA first
+          const branchRes = await fetch(`${API()}/branches/${branch}`, { headers: HDR() });
+          if (branchRes.ok) {
+            const branchData = await branchRes.json();
+            const treeSha = branchData.commit.commit.tree.sha;
+            // Fetch the full recursive tree
+            const treeRes = await fetch(`${API()}/git/trees/${treeSha}?recursive=1`, { headers: HDR() });
+            if (treeRes.ok) {
+              const treeData = await treeRes.json();
+              // Filter to .txt files inside data/raw/
+              rawFiles = (treeData.tree || []).filter(f =>
+                f.type === 'blob' &&
+                f.path.startsWith('data/raw/') &&
+                f.path.endsWith('.txt')
+              ).map(f => ({
+                path: f.path,
+                // Construct raw download URL — fast, no extra API calls
+                download_url: `https://raw.githubusercontent.com/${CFG.user}/${CFG.repo}/${branch}/${f.path}`
+              }));
+            }
+          }
+        } catch (e) { /* repo may be empty on first run */ }
 
-        // 2. Fetch file *contents* using download_url (raw.githubusercontent.com — no auth needed,
-        //    no rate-limit issues, much faster than individual Contents API calls per file)
+        // 2. Fetch all file contents in parallel via raw.githubusercontent.com URLs.
+        //    These don't count against the authenticated API rate limit.
         const entries = await Promise.all(rawFiles.map(async f => {
           try {
-            // download_url looks like:
-            // https://raw.githubusercontent.com/user/repo/main/data/raw/filename.txt
             const r = await fetch(f.download_url);
             if (!r.ok) return null;
             const text = await r.text();
@@ -1178,7 +1203,12 @@
         WORKOUTS = entries.filter(e => e && e.type === 'workout').sort((a, b) => a.date.localeCompare(b.date));
         BODYWEIGHT = entries.filter(e => e && e.type === 'bodyweight').sort((a, b) => a.date.localeCompare(b.date));
 
-        // 4. Render all tabs
+        // 4. Check for unrecognised exercise names that are suspiciously close
+        //    to known canonical names (Levenshtein distance ≤ 2). Surfaces typos
+        //    like "Squats" vs "Squat" that haven't been aliased yet.
+        detectSuspectNames();
+
+        // 5. Render all tabs
         renderDashboard();
         renderLog();
         renderProgress();
@@ -1228,6 +1258,20 @@
       const el = document.getElementById('record-status');
       el.className = 'status-msg' + (type ? ' ' + type : '');
       el.textContent = msg;
+    }
+
+    // Re-read all raw files and refresh every tab.
+    // No JSON cache to rebuild — just re-parses raw .txt files with current aliases.
+    async function triggerReprocess() {
+      const el = document.getElementById('reprocess-status');
+      el.className = 'status-msg'; el.textContent = 'Reprocessing…';
+      try {
+        await loadAliasesFromGitHub();
+        await loadAllData();
+        el.className = 'status-msg ok'; el.textContent = '✓ Reprocessed.';
+      } catch (e) {
+        el.className = 'status-msg err'; el.textContent = '✗ ' + e.message;
+      }
     }
 
     // Reprocess: re-read all raw files and refresh UI
@@ -1360,6 +1404,53 @@
           }
         }
       });
+    }
+
+    // ──────────────────────────────────────────────────────────────
+    // UNRECOGNISED NAME DETECTION
+    // After loading, find exercise names that look like near-duplicates
+    // of each other (edit distance ≤ 2) but aren't aliased — likely typos.
+    // Surfaces a warning banner in the Record tab.
+    // ──────────────────────────────────────────────────────────────
+
+    function levenshtein(a, b) {
+      // Standard DP edit-distance
+      const m = a.length, n = b.length;
+      const dp = Array.from({ length: m + 1 }, (_, i) => Array.from({ length: n + 1 }, (_, j) => i || j));
+      for (let i = 1; i <= m; i++)
+        for (let j = 1; j <= n; j++)
+          dp[i][j] = a[i - 1] === b[j - 1] ? dp[i - 1][j - 1]
+            : 1 + Math.min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]);
+      return dp[m][n];
+    }
+
+    function detectSuspectNames() {
+      const names = [...new Set(WORKOUTS.flatMap(w => w.exercises.map(e => e.name)))];
+      const warnings = [];
+
+      for (let i = 0; i < names.length; i++) {
+        for (let j = i + 1; j < names.length; j++) {
+          const a = names[i].toLowerCase(), b = names[j].toLowerCase();
+          if (levenshtein(a, b) <= 2) {
+            warnings.push(`"${names[i]}" and "${names[j]}" look similar — did you mean to alias them?`);
+          }
+        }
+      }
+
+      // Render warning banner in Record tab if any suspects found
+      const existingBanner = document.getElementById('suspect-banner');
+      if (existingBanner) existingBanner.remove();
+
+      if (warnings.length) {
+        const banner = document.createElement('div');
+        banner.id = 'suspect-banner';
+        banner.style.cssText = 'background:#fff3cd;border:1px solid #f0ad4e;padding:0.85rem 1rem;font-size:0.82rem;line-height:1.7;margin-bottom:1.25rem;color:#7a4f00;';
+        banner.innerHTML = '<strong style="text-transform:uppercase;letter-spacing:0.05em;">⚠ Possible duplicate exercise names</strong><br>'
+          + warnings.map(w => `• ${w}`).join('<br>');
+        // Insert at top of record panel, before the section title
+        const panel = document.getElementById('panel-record');
+        if (panel) panel.insertBefore(banner, panel.firstChild);
+      }
     }
 
     // ──────────────────────────────────────────────────────────────
