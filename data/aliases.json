@@ -1,11 +1,4 @@
 {
-  "Bicep curl": [
-    "bicep curls",
-    "Bicep curls",
-    "DB curls",
-    "Dumbbell curls",
-    "bicep curl"
-  ],
   "Tricep pushdown": [
     "cable tricep pushdown",
     "tricep pushdowns",
@@ -29,5 +22,22 @@
   ],
   "Seated row": [
     "Seated rhomboid row"
+  ],
+  "Seated dumbell curls": [
+    "Seated dumbell curl"
+  ],
+  "Machine press": [
+    "Decline press"
+  ],
+  "Hexbar deadlifts": [
+    "Deficit hexbar deadlifts"
+  ],
+  "Dumbell lateral raise": [
+    "Dumbell lateral raises"
+  ],
+  "Standing dumbell curls": [
+    "Standing dumbell curl",
+    "Standing bicep curl",
+    "Standing bicep curls"
   ]
 }
