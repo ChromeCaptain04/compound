@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,49 +9,66 @@
   <!-- Chart.js + date-fns adapter for progress graphs -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/date-fns/2.30.0/date_fns.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
 
   <!-- Latin Modern Sans — same academic serif feel as the original SPARTAN site -->
   <style>
     @font-face {
       font-family: 'Latin Modern Sans';
       src: url('https://cdn.jsdelivr.net/gh/dreampulse/computer-modern-web-font@master/fonts/lmsans10-regular.woff2') format('woff2'),
-           url('https://cdn.jsdelivr.net/gh/dreampulse/computer-modern-web-font@master/fonts/lmsans10-regular.woff') format('woff');
+        url('https://cdn.jsdelivr.net/gh/dreampulse/computer-modern-web-font@master/fonts/lmsans10-regular.woff') format('woff');
       font-weight: normal;
     }
+
     @font-face {
       font-family: 'Latin Modern Sans';
       src: url('https://cdn.jsdelivr.net/gh/dreampulse/computer-modern-web-font@master/fonts/lmsans10-bold.woff2') format('woff2'),
-           url('https://cdn.jsdelivr.net/gh/dreampulse/computer-modern-web-font@master/fonts/lmsans10-bold.woff') format('woff');
+        url('https://cdn.jsdelivr.net/gh/dreampulse/computer-modern-web-font@master/fonts/lmsans10-bold.woff') format('woff');
       font-weight: bold;
     }
 
     /* ── DESIGN TOKENS ──────────────────────────────────────── */
     :root {
-      --bg:       #F9F6F0;   /* Marble white — same as SPARTAN */
-      --surface:  #FFFFFF;
-      --surface2: #F0EBE1;   /* Stone grey */
-      --border:   #DCD6CC;
-      --accent:   #A33F1F;   /* Spartan Bronze — retained for continuity */
-      --text:     #2B2B2B;
-      --muted:    #595959;
-      --muted2:   #8C8C8C;
-      --danger:   #D32F2F;
-      --good:     #388E3C;
+      --bg: #F9F6F0;
+      /* Marble white — same as SPARTAN */
+      --surface: #FFFFFF;
+      --surface2: #F0EBE1;
+      /* Stone grey */
+      --border: #DCD6CC;
+      --accent: #A33F1F;
+      /* Spartan Bronze — retained for continuity */
+      --text: #2B2B2B;
+      --muted: #595959;
+      --muted2: #8C8C8C;
+      --danger: #D32F2F;
+      --good: #388E3C;
 
       /* Prestige track phase colours (same as original) */
-      --phase-acc: #1976D2;  /* Blue  — sessions  1-8  */
-      --phase-str: #2E7D32;  /* Green — sessions  9-16 */
-      --phase-pek: #D84315;  /* Red   — sessions 17-24 */
+      --phase-acc: #1976D2;
+      /* Blue  — sessions  1-8  */
+      --phase-str: #2E7D32;
+      /* Green — sessions  9-16 */
+      --phase-pek: #D84315;
+      /* Red   — sessions 17-24 */
 
       /* Rep-range colours used in Progress graphs */
-      --rep-low:  #1976D2;   /* 1-5 reps  — blue  (heavy) */
-      --rep-mid:  #F57C00;   /* 6-8 reps  — amber (moderate) */
-      --rep-high: #43A047;   /* 9-20 reps — green (volume) */
+      --rep-low: #1976D2;
+      /* 1-5 reps  — blue  (heavy) */
+      --rep-mid: #F57C00;
+      /* 6-8 reps  — amber (moderate) */
+      --rep-high: #43A047;
+      /* 9-20 reps — green (volume) */
     }
 
     /* ── RESET & BASE ───────────────────────────────────────── */
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
     body {
       background: var(--bg);
@@ -71,6 +89,7 @@
       padding: 2rem;
       gap: 1.5rem;
     }
+
     .config-title {
       font-family: 'Georgia', 'Times New Roman', serif;
       font-size: 2.4rem;
@@ -80,6 +99,7 @@
       text-transform: uppercase;
       text-align: center;
     }
+
     .config-subtitle {
       font-size: 0.78rem;
       color: var(--muted2);
@@ -88,6 +108,7 @@
       text-align: center;
       margin-top: -1rem;
     }
+
     .config-card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -98,6 +119,7 @@
       flex-direction: column;
       gap: 1.25rem;
     }
+
     .config-card label {
       font-size: 0.78rem;
       color: var(--muted);
@@ -107,6 +129,7 @@
       margin-bottom: 0.4rem;
       font-weight: bold;
     }
+
     .config-card input {
       width: 100%;
       background: var(--bg);
@@ -118,12 +141,26 @@
       outline: none;
       transition: border-color 0.2s;
     }
-    .config-card input:focus { border-color: var(--accent); }
-    .config-hint { font-size: 0.78rem; color: var(--muted2); line-height: 1.5; }
-    .config-hint a { color: var(--accent); text-decoration: none; }
+
+    .config-card input:focus {
+      border-color: var(--accent);
+    }
+
+    .config-hint {
+      font-size: 0.78rem;
+      color: var(--muted2);
+      line-height: 1.5;
+    }
+
+    .config-hint a {
+      color: var(--accent);
+      text-decoration: none;
+    }
 
     /* ── APP SHELL ──────────────────────────────────────────── */
-    #app { display: none; }
+    #app {
+      display: none;
+    }
 
     header {
       background: var(--surface);
@@ -137,6 +174,7 @@
       top: 0;
       z-index: 100;
     }
+
     .logo {
       font-family: 'Georgia', 'Times New Roman', serif;
       font-size: 1.4rem;
@@ -149,7 +187,10 @@
       font-weight: normal;
       text-transform: uppercase;
     }
-    .logo.flash { opacity: 0.4; }
+
+    .logo.flash {
+      opacity: 0.4;
+    }
 
     /* Header + button (record tab shortcut) */
     .header-plus {
@@ -165,7 +206,11 @@
       -webkit-tap-highlight-color: transparent;
       padding-bottom: 4px;
     }
-    .header-plus:hover, .header-plus.active { color: var(--accent); }
+
+    .header-plus:hover,
+    .header-plus.active {
+      color: var(--accent);
+    }
 
     nav {
       display: flex;
@@ -175,6 +220,7 @@
       top: 60px;
       z-index: 99;
     }
+
     nav button {
       flex: 1;
       background: none;
@@ -190,7 +236,11 @@
       transition: all 0.15s;
       font-weight: bold;
     }
-    nav button.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+    nav button.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
 
     .panel {
       display: none;
@@ -198,7 +248,10 @@
       max-width: 800px;
       margin: 0 auto;
     }
-    .panel.active { display: block; }
+
+    .panel.active {
+      display: block;
+    }
 
     /* The secret exercise-history panel (double-tap logo) */
     #panel-all {
@@ -207,7 +260,10 @@
       max-width: 800px;
       margin: 0 auto;
     }
-    #panel-all.active { display: block; }
+
+    #panel-all.active {
+      display: block;
+    }
 
     /* ── TYPOGRAPHY UTILITIES ───────────────────────────────── */
     .section-title {
@@ -220,6 +276,7 @@
       border-bottom: 1px solid var(--border);
       padding-bottom: 0.5rem;
     }
+
     .card-label {
       font-size: 0.72rem;
       color: var(--muted);
@@ -228,6 +285,7 @@
       margin-bottom: 0.4rem;
       font-weight: bold;
     }
+
     .card-value {
       font-size: 1.8rem;
       color: var(--text);
@@ -235,7 +293,12 @@
       line-height: 1;
       font-weight: bold;
     }
-    .card-sub { font-size: 0.78rem; color: var(--muted2); margin-top: 0.35rem; }
+
+    .card-sub {
+      font-size: 0.78rem;
+      color: var(--muted2);
+      margin-top: 0.35rem;
+    }
 
     /* ── CARDS ──────────────────────────────────────────────── */
     .card {
@@ -244,13 +307,17 @@
       padding: 1.25rem;
       margin-bottom: 1rem;
     }
+
     .stat-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 1rem;
       margin-bottom: 1.5rem;
     }
-    .stat-grid .card { margin-bottom: 0; }
+
+    .stat-grid .card {
+      margin-bottom: 0;
+    }
 
     /* ── SESSION DISPLAYS ───────────────────────────────────── */
     .session-header {
@@ -259,12 +326,14 @@
       align-items: baseline;
       margin-bottom: 0.75rem;
     }
+
     .session-date {
       font-size: 1.2rem;
       color: var(--text);
       letter-spacing: 0.05em;
       font-weight: bold;
     }
+
     .plain-tag {
       font-size: 0.82rem;
       color: var(--muted);
@@ -272,9 +341,24 @@
       letter-spacing: 0.1em;
       font-weight: bold;
     }
-    .exercise-row { border-top: 1px solid var(--border); padding: 0.75rem 0; }
-    .ex-name { font-weight: bold; font-size: 0.95rem; margin-bottom: 0.5rem; }
-    .sets-row { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+    .exercise-row {
+      border-top: 1px solid var(--border);
+      padding: 0.75rem 0;
+    }
+
+    .ex-name {
+      font-weight: bold;
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .sets-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
     .set-chip {
       background: var(--bg);
       border: 1px solid var(--border);
@@ -282,7 +366,13 @@
       padding: 0.25rem 0.5rem;
       color: var(--text);
     }
-    .set-count { color: var(--accent); margin-right: 0.25rem; font-weight: bold; }
+
+    .set-count {
+      color: var(--accent);
+      margin-right: 0.25rem;
+      font-weight: bold;
+    }
+
     .recency-latest {
       font-size: 0.7rem;
       color: var(--surface);
@@ -294,7 +384,10 @@
     }
 
     /* ── ALL-SESSIONS ARCHIVE BLOCKS ────────────────────────── */
-    .all-session-block { margin-bottom: 1.5rem; }
+    .all-session-block {
+      margin-bottom: 1.5rem;
+    }
+
     .all-session-hdr {
       display: flex;
       justify-content: space-between;
@@ -304,9 +397,25 @@
       border: 1px solid var(--border);
       border-bottom: none;
     }
-    .all-session-left { display: flex; align-items: center; gap: 0.75rem; }
-    .all-wnum { font-size: 0.78rem; color: var(--muted); font-weight: bold; }
-    .all-session-date { font-size: 1.05rem; letter-spacing: 0.05em; font-weight: bold; }
+
+    .all-session-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .all-wnum {
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-weight: bold;
+    }
+
+    .all-session-date {
+      font-size: 1.05rem;
+      letter-spacing: 0.05em;
+      font-weight: bold;
+    }
+
     .all-session-body {
       border: 1px solid var(--border);
       border-top: none;
@@ -315,7 +424,10 @@
     }
 
     /* ── EXERCISE HISTORY (LOGO DOUBLE-TAP) ─────────────────── */
-    .progress-ex-block { margin-bottom: 1.5rem; }
+    .progress-ex-block {
+      margin-bottom: 1.5rem;
+    }
+
     .progress-ex-title {
       font-size: 1.05rem;
       letter-spacing: 0.1em;
@@ -326,6 +438,7 @@
       font-weight: bold;
       text-transform: uppercase;
     }
+
     .recent-session-row {
       display: flex;
       align-items: flex-start;
@@ -333,10 +446,32 @@
       padding: 0.75rem 0;
       border-bottom: 1px solid var(--border);
     }
-    .recent-session-row:last-child { border-bottom: none; }
-    .rs-date-col { display: flex; align-items: center; gap: 0.5rem; min-width: 100px; flex-shrink: 0; }
-    .rs-date { font-size: 0.82rem; color: var(--muted); white-space: nowrap; font-weight: bold; }
-    .rs-sets { display: flex; flex-wrap: wrap; gap: 0.4rem; flex: 1; }
+
+    .recent-session-row:last-child {
+      border-bottom: none;
+    }
+
+    .rs-date-col {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      min-width: 100px;
+      flex-shrink: 0;
+    }
+
+    .rs-date {
+      font-size: 0.82rem;
+      color: var(--muted);
+      white-space: nowrap;
+      font-weight: bold;
+    }
+
+    .rs-sets {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      flex: 1;
+    }
 
     /* ── RECORD TAB ─────────────────────────────────────────── */
     .log-label {
@@ -348,6 +483,7 @@
       margin-bottom: 0.5rem;
       font-weight: bold;
     }
+
     textarea.log-input {
       width: 100%;
       background: var(--surface);
@@ -362,7 +498,10 @@
       transition: border-color 0.2s;
       min-height: 220px;
     }
-    textarea.log-input:focus { border-color: var(--accent); }
+
+    textarea.log-input:focus {
+      border-color: var(--accent);
+    }
 
     .format-hint {
       background: var(--bg);
@@ -373,8 +512,15 @@
       line-height: 1.8;
       margin-bottom: 1.5rem;
     }
-    .format-hint strong { color: var(--text); }
-    .format-hint span { color: var(--accent); }
+
+    .format-hint strong {
+      color: var(--text);
+    }
+
+    .format-hint span {
+      color: var(--accent);
+    }
+
     .format-example {
       color: var(--muted2);
       font-size: 0.78rem;
@@ -400,8 +546,16 @@
       margin-top: 1rem;
       font-weight: bold;
     }
-    .btn:hover { opacity: 0.85; }
-    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .btn:hover {
+      opacity: 0.85;
+    }
+
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
     .btn-sm {
       background: var(--text);
       color: var(--surface);
@@ -414,8 +568,17 @@
       cursor: pointer;
       font-weight: bold;
     }
-    .btn-sm.ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
-    .btn-sm.danger { background: var(--danger); color: #fff; }
+
+    .btn-sm.ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+
+    .btn-sm.danger {
+      background: var(--danger);
+      color: #fff;
+    }
 
     /* ── STATUS MESSAGES ────────────────────────────────────── */
     .status-msg {
@@ -426,8 +589,14 @@
       color: var(--muted);
       font-weight: bold;
     }
-    .status-msg.ok { color: var(--good); }
-    .status-msg.err { color: var(--danger); }
+
+    .status-msg.ok {
+      color: var(--good);
+    }
+
+    .status-msg.err {
+      color: var(--danger);
+    }
 
     /* ── EMPTY / LOADING STATES ─────────────────────────────── */
     .empty-state {
@@ -439,6 +608,7 @@
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
+
     .loading {
       text-align: center;
       color: var(--muted);
@@ -446,7 +616,18 @@
       padding: 2rem;
       animation: pulse 1.5s ease-in-out infinite;
     }
-    @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 0.4;
+      }
+
+      50% {
+        opacity: 1;
+      }
+    }
 
     /* ── PRESTIGE TRACKER (TUBE MAP) ────────────────────────── */
     .cycle-wrap {
@@ -455,21 +636,49 @@
       padding: 1.25rem;
       margin-bottom: 1.5rem;
     }
-    .tube-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 8px; }
-    .tube-map { display: flex; align-items: center; min-width: min-content; padding: 0.5rem 0.25rem; }
-    .t-line { display: inline-block; flex-shrink: 0; transition: background 0.3s ease; }
+
+    .tube-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 8px;
+    }
+
+    .tube-map {
+      display: flex;
+      align-items: center;
+      min-width: min-content;
+      padding: 0.5rem 0.25rem;
+    }
+
+    .t-line {
+      display: inline-block;
+      flex-shrink: 0;
+      transition: background 0.3s ease;
+    }
 
     /* ── PROGRESS CHARTS ────────────────────────────────────── */
-    .chart-wrap { position: relative; height: 220px; }
-    .progress-ex-block.card { margin-bottom: 1.5rem; }
+    .chart-wrap {
+      position: relative;
+      height: 220px;
+    }
+
+    .progress-ex-block.card {
+      margin-bottom: 1.5rem;
+    }
 
     /* ── BODYWEIGHT CHART ───────────────────────────────────── */
-    .bw-chart-wrap { position: relative; height: 200px; margin-top: 0.75rem; }
+    .bw-chart-wrap {
+      position: relative;
+      height: 200px;
+      margin-top: 0.75rem;
+    }
 
     /* ── FOOTER ─────────────────────────────────────────────── */
     .footnote {
       position: fixed;
-      bottom: 0; left: 0; right: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
       background: var(--surface);
       border-top: 1px solid var(--border);
       padding: 0.6rem 1rem;
@@ -481,7 +690,12 @@
       z-index: 200;
       letter-spacing: 0.05em;
     }
-    .footer-center { flex: 1; text-align: center; }
+
+    .footer-center {
+      flex: 1;
+      text-align: center;
+    }
+
     .footer-reconfig {
       font-size: 0.62rem;
       color: var(--muted2);
@@ -491,7 +705,10 @@
       transition: color 0.2s;
       font-weight: bold;
     }
-    .footer-reconfig:hover { color: var(--accent); }
+
+    .footer-reconfig:hover {
+      color: var(--accent);
+    }
 
     /* ── EXERCISE ALIAS MANAGER ─────────────────────────────── */
     .alias-row {
@@ -502,10 +719,30 @@
       border-bottom: 1px solid var(--border);
       font-size: 0.85rem;
     }
-    .alias-row:last-child { border-bottom: none; }
-    .alias-master { font-weight: bold; color: var(--text); min-width: 140px; }
-    .alias-variants { color: var(--muted); flex: 1; font-size: 0.8rem; }
-    .alias-delete { cursor: pointer; color: var(--danger); font-weight: bold; padding: 0 0.4rem; flex-shrink: 0; }
+
+    .alias-row:last-child {
+      border-bottom: none;
+    }
+
+    .alias-master {
+      font-weight: bold;
+      color: var(--text);
+      min-width: 140px;
+    }
+
+    .alias-variants {
+      color: var(--muted);
+      flex: 1;
+      font-size: 0.8rem;
+    }
+
+    .alias-delete {
+      cursor: pointer;
+      color: var(--danger);
+      font-weight: bold;
+      padding: 0 0.4rem;
+      flex-shrink: 0;
+    }
 
     /* ── REP-RANGE LEGEND ───────────────────────────────────── */
     .rep-legend {
@@ -514,615 +751,650 @@
       margin-bottom: 0.75rem;
       flex-wrap: wrap;
     }
-    .rep-legend-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.78rem; color: var(--muted); }
-    .rep-swatch { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+
+    .rep-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .rep-swatch {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
   </style>
 </head>
+
 <body>
 
-<!-- ═══════════════════════════════════════════════════════════
+  <!-- ═══════════════════════════════════════════════════════════
      CONFIG SCREEN — shown on first visit; stores token locally
      ════════════════════════════════════════════════════════ -->
-<div id="config-screen">
-  <div class="config-title">Compound Interest</div>
-  <div class="config-subtitle">Strength Training Tracker</div>
-  <div class="config-card">
-    <div>
-      <label>GitHub Username</label>
-      <input id="cfg-user" type="text" placeholder="username" autocomplete="off" autocorrect="off" autocapitalize="off">
-    </div>
-    <div>
-      <label>Repository Name</label>
-      <input id="cfg-repo" type="text" placeholder="compound-interest" autocomplete="off" autocorrect="off" autocapitalize="off">
-    </div>
-    <div>
-      <label>Personal Access Token</label>
-      <input id="cfg-token" type="password" placeholder="ghp_xxxxxxxxxxxx">
-      <div class="config-hint" style="margin-top:0.75rem">
-        Stored locally in your browser only. Token requires <strong>repo</strong> scope.
-        <br><a href="https://github.com/settings/tokens" target="_blank">Generate token →</a>
+  <div id="config-screen">
+    <div class="config-title">Compound Interest</div>
+    <div class="config-subtitle">Strength Training Tracker</div>
+    <div class="config-card">
+      <div>
+        <label>GitHub Username</label>
+        <input id="cfg-user" type="text" placeholder="username" autocomplete="off" autocorrect="off"
+          autocapitalize="off">
       </div>
+      <div>
+        <label>Repository Name</label>
+        <input id="cfg-repo" type="text" placeholder="compound-interest" autocomplete="off" autocorrect="off"
+          autocapitalize="off">
+      </div>
+      <div>
+        <label>Personal Access Token</label>
+        <input id="cfg-token" type="password" placeholder="ghp_xxxxxxxxxxxx">
+        <div class="config-hint" style="margin-top:0.75rem">
+          Stored locally in your browser only. Token requires <strong>repo</strong> scope.
+          <br><a href="https://github.com/settings/tokens" target="_blank">Generate token →</a>
+        </div>
+      </div>
+      <button class="btn" onclick="saveConfig()">Enter</button>
+      <div class="status-msg" id="cfg-status"></div>
     </div>
-    <button class="btn" onclick="saveConfig()">Enter</button>
-    <div class="status-msg" id="cfg-status"></div>
   </div>
-</div>
 
-<!-- ═══════════════════════════════════════════════════════════
+  <!-- ═══════════════════════════════════════════════════════════
      MAIN APPLICATION
      ════════════════════════════════════════════════════════ -->
-<div id="app">
-  <header>
-    <div class="logo" id="logo" onclick="handleLogoTap()">Compound Interest</div>
-    <div class="header-plus" id="header-plus" onclick="openRecord()">+</div>
-  </header>
+  <div id="app">
+    <header>
+      <div class="logo" id="logo" onclick="handleLogoTap()">Compound Interest</div>
+      <div class="header-plus" id="header-plus" onclick="openRecord()">+</div>
+    </header>
 
-  <nav>
-    <button class="active" onclick="switchTab('dashboard', this)">Dashboard</button>
-    <button onclick="switchTab('log', this)">Log</button>
-    <button onclick="switchTab('progress', this)">Progress</button>
-    <button onclick="switchTab('record', this)">Record</button>
-  </nav>
+    <nav>
+      <button class="active" onclick="switchTab('dashboard', this)">Dashboard</button>
+      <button onclick="switchTab('log', this)">Log</button>
+      <button onclick="switchTab('progress', this)">Progress</button>
+      <button onclick="switchTab('record', this)">Record</button>
+    </nav>
 
-  <!-- ── DASHBOARD TAB ──────────────────────────────────────── -->
-  <div id="panel-dashboard" class="panel active">
-    <div id="dash-content"><div class="loading">Fetching archives…</div></div>
-  </div>
-
-  <!-- ── LOG TAB (all past workouts) ───────────────────────── -->
-  <div id="panel-log" class="panel">
-    <div id="log-content"><div class="loading">Loading…</div></div>
-  </div>
-
-  <!-- ── PROGRESS TAB (exercise graphs) ────────────────────── -->
-  <div id="panel-progress" class="panel">
-    <div id="progress-content"><div class="loading">Loading…</div></div>
-  </div>
-
-  <!-- ── RECORD TAB ─────────────────────────────────────────── -->
-  <div id="panel-record" class="panel">
-    <div class="section-title">Record Session</div>
-
-    <!-- Format guide -->
-    <div class="format-hint">
-      <strong>Workout Shorthand</strong><br>
-      <span>YYYY-MM-DD | notes</span><br>
-      Exercise: <span>weightxreps, weightxreps</span><br>
-      <em class="format-example">
-        Example:<br>
-        2026-05-25 | felt strong today<br>
-        Bench press: 100x3, 100x4<br>
-        Bicep curls: 8x18, 8x16
-      </em>
-      <br><br>
-      <strong>Bodyweight Shorthand</strong><br>
-      <span>YYYY-MM-DD | weight</span><br>
-      <em class="format-example">Example: &nbsp;2026-05-25 | 82.4</em>
+    <!-- ── DASHBOARD TAB ──────────────────────────────────────── -->
+    <div id="panel-dashboard" class="panel active">
+      <div id="dash-content">
+        <div class="loading">Fetching archives…</div>
+      </div>
     </div>
 
-    <label class="log-label">Entry</label>
-    <textarea class="log-input" id="record-input" placeholder="Paste your shorthand here…"></textarea>
-    <button class="btn" id="commit-btn" onclick="submitRecord()">Commit Record</button>
-    <div class="status-msg" id="record-status"></div>
-
-    <!-- ── EXERCISE ALIAS MANAGER ────────────────────────── -->
-    <div style="margin-top:2.5rem; border-top:1px solid var(--border); padding-top:1.5rem;">
-      <div class="section-title" style="display:flex;justify-content:space-between;align-items:baseline;">
-        <span>Exercise Aliases</span>
-        <span class="footer-reconfig" onclick="toggleAliasEditor()">[ EDIT ]</span>
+    <!-- ── LOG TAB (all past workouts) ───────────────────────── -->
+    <div id="panel-log" class="panel">
+      <div id="log-content">
+        <div class="loading">Loading…</div>
       </div>
-      <div class="card-sub" style="margin-bottom:1rem;">
-        Map shorthand names → canonical exercise names. All variants are treated as the master name across the dashboard and graphs.
-      </div>
-      <div id="alias-list"></div>
+    </div>
 
-      <div id="alias-editor" style="display:none; margin-top:1rem;">
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; margin-bottom:0.75rem;">
-          <div>
-            <label class="log-label">Master Name</label>
-            <input id="alias-master-input" type="text" placeholder="Bicep curl" style="width:100%;background:var(--bg);border:1px solid var(--border);padding:0.6rem;font-family:inherit;font-size:0.9rem;outline:none;color:var(--text);">
-          </div>
-          <div>
-            <label class="log-label">Variant Names (comma-separated)</label>
-            <input id="alias-variants-input" type="text" placeholder="bicep curls, DB curls" style="width:100%;background:var(--bg);border:1px solid var(--border);padding:0.6rem;font-family:inherit;font-size:0.9rem;outline:none;color:var(--text);">
-          </div>
+    <!-- ── PROGRESS TAB (exercise graphs) ────────────────────── -->
+    <div id="panel-progress" class="panel">
+      <div id="progress-content">
+        <div class="loading">Loading…</div>
+      </div>
+    </div>
+
+    <!-- ── RECORD TAB ─────────────────────────────────────────── -->
+    <div id="panel-record" class="panel">
+      <div class="section-title">Record Session</div>
+
+      <!-- Format guide -->
+      <div class="format-hint">
+        <strong>Workout Shorthand</strong><br>
+        <span>YYYY-MM-DD | notes</span><br>
+        Exercise: <span>weightxreps, weightxreps</span><br>
+        <em class="format-example">
+          Example:<br>
+          2026-05-25 | felt strong today<br>
+          Bench press: 100x3, 100x4<br>
+          Bicep curls: 8x18, 8x16
+        </em>
+        <br><br>
+        <strong>Bodyweight Shorthand</strong><br>
+        <span>YYYY-MM-DD | weight</span><br>
+        <em class="format-example">Example: &nbsp;2026-05-25 | 82.4</em>
+      </div>
+
+      <label class="log-label">Entry</label>
+      <textarea class="log-input" id="record-input" placeholder="Paste your shorthand here…"></textarea>
+      <button class="btn" id="commit-btn" onclick="submitRecord()">Commit Record</button>
+      <div class="status-msg" id="record-status"></div>
+
+      <!-- ── EXERCISE ALIAS MANAGER ────────────────────────── -->
+      <div style="margin-top:2.5rem; border-top:1px solid var(--border); padding-top:1.5rem;">
+        <div class="section-title" style="display:flex;justify-content:space-between;align-items:baseline;">
+          <span>Exercise Aliases</span>
+          <span class="footer-reconfig" onclick="toggleAliasEditor()">[ EDIT ]</span>
         </div>
-        <button class="btn-sm" onclick="addAlias()">Add Alias</button>
-        <button class="btn-sm ghost" style="margin-left:0.5rem;" onclick="saveAliases()">Save to GitHub</button>
-        <div class="status-msg" id="alias-status"></div>
+        <div class="card-sub" style="margin-bottom:1rem;">
+          Map shorthand names → canonical exercise names. All variants are treated as the master name across the
+          dashboard and graphs.
+        </div>
+        <div id="alias-list"></div>
+
+        <div id="alias-editor" style="display:none; margin-top:1rem;">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; margin-bottom:0.75rem;">
+            <div>
+              <label class="log-label">Master Name</label>
+              <input id="alias-master-input" type="text" placeholder="Bicep curl"
+                style="width:100%;background:var(--bg);border:1px solid var(--border);padding:0.6rem;font-family:inherit;font-size:0.9rem;outline:none;color:var(--text);">
+            </div>
+            <div>
+              <label class="log-label">Variant Names (comma-separated)</label>
+              <input id="alias-variants-input" type="text" placeholder="bicep curls, DB curls"
+                style="width:100%;background:var(--bg);border:1px solid var(--border);padding:0.6rem;font-family:inherit;font-size:0.9rem;outline:none;color:var(--text);">
+            </div>
+          </div>
+          <button class="btn-sm" onclick="addAlias()">Add Alias</button>
+          <button class="btn-sm ghost" style="margin-left:0.5rem;" onclick="saveAliases()">Save to GitHub</button>
+          <div class="status-msg" id="alias-status"></div>
+        </div>
+      </div>
+
+      <!-- ── REPROCESS ARCHIVES ────────────────────────────── -->
+      <div style="margin-top:2.5rem; border-top:1px solid var(--border); padding-top:1.5rem;">
+        <div class="section-title">System</div>
+        <div style="font-size:0.83rem;color:var(--muted);line-height:1.6;margin-bottom:1rem;">
+          Re-parse all raw text files and rebuild all JSON archives. Use after changing aliases or if data appears
+          incorrect.
+        </div>
+        <button class="btn-sm danger" onclick="triggerReprocess()">Reprocess Archives</button>
+        <div class="status-msg" id="reprocess-status"></div>
       </div>
     </div>
 
-    <!-- ── REPROCESS ARCHIVES ────────────────────────────── -->
-    <div style="margin-top:2.5rem; border-top:1px solid var(--border); padding-top:1.5rem;">
-      <div class="section-title">System</div>
-      <div style="font-size:0.83rem;color:var(--muted);line-height:1.6;margin-bottom:1rem;">
-        Re-parse all raw text files and rebuild all JSON archives. Use after changing aliases or if data appears incorrect.
+    <!-- ── EXERCISE HISTORY PANEL (logo double-tap) ──────────── -->
+    <div id="panel-all">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
+        <div class="section-title" style="margin:0;border:none;">Exercise History</div>
+        <button class="btn-sm ghost" onclick="closeAll()">Return</button>
       </div>
-      <button class="btn-sm danger" onclick="triggerReprocess()">Reprocess Archives</button>
-      <div class="status-msg" id="reprocess-status"></div>
+      <div class="card-sub" style="margin-bottom:1.5rem;">Last 3 sessions per exercise, latest first.</div>
+      <div id="all-content"></div>
     </div>
-  </div>
 
-  <!-- ── EXERCISE HISTORY PANEL (logo double-tap) ──────────── -->
-  <div id="panel-all">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
-      <div class="section-title" style="margin:0;border:none;">Exercise History</div>
-      <button class="btn-sm ghost" onclick="closeAll()">Return</button>
+    <div class="footnote">
+      <span style="visibility:hidden" class="footer-reconfig">[ RECONFIGURE ]</span>
+      <span class="footer-center">Double-tap logo to view exercise history.</span>
+      <span class="footer-reconfig" onclick="resetConfig()">[ RECONFIGURE ]</span>
     </div>
-    <div class="card-sub" style="margin-bottom:1.5rem;">Last 3 sessions per exercise, latest first.</div>
-    <div id="all-content"></div>
-  </div>
+  </div><!-- /#app -->
 
-  <div class="footnote">
-    <span style="visibility:hidden" class="footer-reconfig">[ RECONFIGURE ]</span>
-    <span class="footer-center">Double-tap logo to view exercise history.</span>
-    <span class="footer-reconfig" onclick="resetConfig()">[ RECONFIGURE ]</span>
-  </div>
-</div><!-- /#app -->
-
-<!-- ═══════════════════════════════════════════════════════════
+  <!-- ═══════════════════════════════════════════════════════════
      JAVASCRIPT
      ════════════════════════════════════════════════════════ -->
-<script>
+  <script>
 
-// ──────────────────────────────────────────────────────────────
-// CONFIGURATION & GITHUB HELPERS
-// ──────────────────────────────────────────────────────────────
+    // ──────────────────────────────────────────────────────────────
+    // CONFIGURATION & GITHUB HELPERS
+    // ──────────────────────────────────────────────────────────────
 
-let CFG = {};
+    let CFG = {};
 
-function saveConfig() {
-  const u = document.getElementById('cfg-user').value.trim();
-  const r = document.getElementById('cfg-repo').value.trim() || 'compound-interest';
-  const t = document.getElementById('cfg-token').value.trim();
-  if (!u || !t) { document.getElementById('cfg-status').className='status-msg err'; document.getElementById('cfg-status').textContent='Please fill in all fields.'; return; }
-  CFG = { user: u, repo: r, branch: 'main', token: t };
-  localStorage.setItem('ci_cfg', JSON.stringify(CFG));
-  enterApp();
-}
+    function saveConfig() {
+      const u = document.getElementById('cfg-user').value.trim();
+      const r = document.getElementById('cfg-repo').value.trim() || 'compound-interest';
+      const t = document.getElementById('cfg-token').value.trim();
+      if (!u || !t) { document.getElementById('cfg-status').className = 'status-msg err'; document.getElementById('cfg-status').textContent = 'Please fill in all fields.'; return; }
+      CFG = { user: u, repo: r, branch: 'main', token: t };
+      localStorage.setItem('ci_cfg', JSON.stringify(CFG));
+      enterApp();
+    }
 
-function loadConfig() {
-  try {
-    const s = localStorage.getItem('ci_cfg');
-    if (s) {
-      CFG = JSON.parse(s);
-      if (CFG.user && CFG.token) {
-        document.getElementById('cfg-user').value = CFG.user;
-        document.getElementById('cfg-repo').value = CFG.repo || 'compound-interest';
-        document.getElementById('cfg-token').value = CFG.token;
-        enterApp();
+    function loadConfig() {
+      try {
+        const s = localStorage.getItem('ci_cfg');
+        if (s) {
+          CFG = JSON.parse(s);
+          if (CFG.user && CFG.token) {
+            document.getElementById('cfg-user').value = CFG.user;
+            document.getElementById('cfg-repo').value = CFG.repo || 'compound-interest';
+            document.getElementById('cfg-token').value = CFG.token;
+            enterApp();
+          }
+        }
+      } catch (e) { }
+    }
+
+    function enterApp() {
+      document.getElementById('config-screen').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      loadAliasesFromGitHub().then(() => loadAllData());
+    }
+
+    function resetConfig() {
+      localStorage.removeItem('ci_cfg');
+      location.reload();
+    }
+
+    // GitHub API helpers
+    const API = () => `https://api.github.com/repos/${CFG.user}/${CFG.repo}`;
+    const HDR = () => ({ 'Authorization': `token ${CFG.token}`, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' });
+    const b64d = s => decodeURIComponent(escape(atob(s.replace(/\n/g, ''))));
+    const b64e = s => btoa(unescape(encodeURIComponent(s)));
+
+    async function ghGet(path) {
+      const r = await fetch(`${API()}/contents/${path}?ref=${CFG.branch || 'main'}`, { headers: HDR() });
+      if (!r.ok) throw new Error(r.status);
+      return r.json();
+    }
+
+    async function ghPut(path, msg, content, sha) {
+      const body = { message: msg, content: b64e(content), branch: CFG.branch || 'main', ...(sha ? { sha } : {}) };
+      const r = await fetch(`${API()}/contents/${path}`, { method: 'PUT', headers: HDR(), body: JSON.stringify(body) });
+      if (!r.ok) throw new Error((await r.json()).message || 'API error');
+      return r.json();
+    }
+
+    async function ghGetSha(path) {
+      try { const d = await ghGet(path); return d.sha; } catch (e) { return null; }
+    }
+
+    // ──────────────────────────────────────────────────────────────
+    // ALIAS SYSTEM
+    // Maps variant names → canonical master names.
+    // Stored in data/aliases.json in the repo.
+    // ──────────────────────────────────────────────────────────────
+
+    // ALIASES: { "master name": ["variant1", "variant2", ...], ... }
+    let ALIASES = {};
+    let ALIAS_SHA = null;
+
+    function normaliseExerciseName(raw) {
+      // Trim and lowercase for lookup
+      const lower = raw.trim().toLowerCase();
+      for (const [master, variants] of Object.entries(ALIASES)) {
+        // Check if raw matches master (case-insensitive) or any variant
+        if (master.toLowerCase() === lower) return master;
+        for (const v of variants) {
+          if (v.toLowerCase() === lower) return master;
+        }
       }
+      // No alias match — return trimmed original (preserve original casing with title-case)
+      return raw.trim();
     }
-  } catch(e) {}
-}
 
-function enterApp() {
-  document.getElementById('config-screen').style.display = 'none';
-  document.getElementById('app').style.display = 'block';
-  loadAliasesFromGitHub().then(() => loadAllData());
-}
-
-function resetConfig() {
-  localStorage.removeItem('ci_cfg');
-  location.reload();
-}
-
-// GitHub API helpers
-const API  = () => `https://api.github.com/repos/${CFG.user}/${CFG.repo}`;
-const HDR  = () => ({ 'Authorization': `token ${CFG.token}`, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' });
-const b64d = s  => decodeURIComponent(escape(atob(s.replace(/\n/g,''))));
-const b64e = s  => btoa(unescape(encodeURIComponent(s)));
-
-async function ghGet(path) {
-  const r = await fetch(`${API()}/contents/${path}?ref=${CFG.branch||'main'}`, { headers: HDR() });
-  if (!r.ok) throw new Error(r.status);
-  return r.json();
-}
-
-async function ghPut(path, msg, content, sha) {
-  const body = { message: msg, content: b64e(content), branch: CFG.branch||'main', ...(sha ? { sha } : {}) };
-  const r = await fetch(`${API()}/contents/${path}`, { method:'PUT', headers:HDR(), body:JSON.stringify(body) });
-  if (!r.ok) throw new Error((await r.json()).message || 'API error');
-  return r.json();
-}
-
-async function ghGetSha(path) {
-  try { const d = await ghGet(path); return d.sha; } catch(e) { return null; }
-}
-
-// ──────────────────────────────────────────────────────────────
-// ALIAS SYSTEM
-// Maps variant names → canonical master names.
-// Stored in data/aliases.json in the repo.
-// ──────────────────────────────────────────────────────────────
-
-// ALIASES: { "master name": ["variant1", "variant2", ...], ... }
-let ALIASES = {};
-let ALIAS_SHA = null;
-
-function normaliseExerciseName(raw) {
-  // Trim and lowercase for lookup
-  const lower = raw.trim().toLowerCase();
-  for (const [master, variants] of Object.entries(ALIASES)) {
-    // Check if raw matches master (case-insensitive) or any variant
-    if (master.toLowerCase() === lower) return master;
-    for (const v of variants) {
-      if (v.toLowerCase() === lower) return master;
+    async function loadAliasesFromGitHub() {
+      try {
+        // Fetch metadata for the SHA (needed later to overwrite the file)
+        const meta = await ghGet('data/aliases.json');
+        ALIAS_SHA = meta.sha;
+        // Fetch actual content via download_url — fast, no base64 decoding needed
+        const r = await fetch(meta.download_url);
+        if (!r.ok) throw new Error(r.status);
+        ALIASES = await r.json();
+      } catch (e) {
+        // File doesn't exist yet — start empty
+        ALIASES = {};
+        ALIAS_SHA = null;
+      }
+      renderAliasList();
     }
-  }
-  // No alias match — return trimmed original (preserve original casing with title-case)
-  return raw.trim();
-}
 
-async function loadAliasesFromGitHub() {
-  try {
-    const d = await ghGet('data/aliases.json');
-    ALIAS_SHA = d.sha;
-    ALIASES = JSON.parse(b64d(d.content));
-  } catch(e) {
-    // File doesn't exist yet — start empty
-    ALIASES = {};
-    ALIAS_SHA = null;
-  }
-  renderAliasList();
-}
-
-function renderAliasList() {
-  const el = document.getElementById('alias-list');
-  if (!el) return;
-  const entries = Object.entries(ALIASES);
-  if (!entries.length) {
-    el.innerHTML = `<div class="card-sub" style="padding:0.5rem 0;">No aliases defined yet.</div>`;
-    return;
-  }
-  el.innerHTML = entries.map(([master, variants]) => `
+    function renderAliasList() {
+      const el = document.getElementById('alias-list');
+      if (!el) return;
+      const entries = Object.entries(ALIASES);
+      if (!entries.length) {
+        el.innerHTML = `<div class="card-sub" style="padding:0.5rem 0;">No aliases defined yet.</div>`;
+        return;
+      }
+      el.innerHTML = entries.map(([master, variants]) => `
     <div class="alias-row">
       <div class="alias-master">${master}</div>
       <div class="alias-variants">← ${variants.join(', ')}</div>
-      <div class="alias-delete" onclick="removeAlias('${master.replace(/'/g,"\\'")}')">✕</div>
+      <div class="alias-delete" onclick="removeAlias('${master.replace(/'/g, "\\'")}')">✕</div>
     </div>`).join('');
-}
+    }
 
-function toggleAliasEditor() {
-  const ed = document.getElementById('alias-editor');
-  ed.style.display = ed.style.display === 'none' ? 'block' : 'none';
-}
+    function toggleAliasEditor() {
+      const ed = document.getElementById('alias-editor');
+      ed.style.display = ed.style.display === 'none' ? 'block' : 'none';
+    }
 
-function addAlias() {
-  const master   = document.getElementById('alias-master-input').value.trim();
-  const variants = document.getElementById('alias-variants-input').value.split(',').map(v=>v.trim()).filter(Boolean);
-  if (!master || !variants.length) { alert('Enter a master name and at least one variant.'); return; }
-  ALIASES[master] = [...new Set([...(ALIASES[master]||[]), ...variants])];
-  renderAliasList();
-  document.getElementById('alias-master-input').value = '';
-  document.getElementById('alias-variants-input').value = '';
-}
+    function addAlias() {
+      const master = document.getElementById('alias-master-input').value.trim();
+      const variants = document.getElementById('alias-variants-input').value.split(',').map(v => v.trim()).filter(Boolean);
+      if (!master || !variants.length) { alert('Enter a master name and at least one variant.'); return; }
+      ALIASES[master] = [...new Set([...(ALIASES[master] || []), ...variants])];
+      renderAliasList();
+      document.getElementById('alias-master-input').value = '';
+      document.getElementById('alias-variants-input').value = '';
+    }
 
-function removeAlias(master) {
-  delete ALIASES[master];
-  renderAliasList();
-}
+    function removeAlias(master) {
+      delete ALIASES[master];
+      renderAliasList();
+    }
 
-async function saveAliases() {
-  const st = document.getElementById('alias-status');
-  st.className='status-msg'; st.textContent='Saving aliases…';
-  try {
-    const res = await ghPut('data/aliases.json', 'update: exercise aliases', JSON.stringify(ALIASES, null, 2), ALIAS_SHA);
-    ALIAS_SHA = res.content.sha;
-    st.className='status-msg ok'; st.textContent='✓ Aliases saved.';
-    // Reload data so normalisation picks up new aliases
-    await loadAllData();
-  } catch(e) {
-    st.className='status-msg err'; st.textContent='✗ '+e.message;
-  }
-}
-
-// ──────────────────────────────────────────────────────────────
-// DATA LOADING
-// Reads raw .txt files from data/raw/, parses them client-side,
-// then reads/writes JSON to data/json/ for persistence.
-// ──────────────────────────────────────────────────────────────
-
-let WORKOUTS   = [];   // All strength workouts, sorted ascending by date
-let BODYWEIGHT = [];   // [{date, weight}] sorted ascending
-
-// Parse shorthand text into a workout object (or bodyweight entry)
-function parseEntry(text) {
-  const lines = text.trim().split('\n').filter(l => l.trim());
-  if (!lines.length) return null;
-
-  // Header: YYYY-MM-DD | something
-  const header = lines[0];
-  const dateMatch = header.match(/^(\d{4}-\d{2}-\d{2})\s*\|?\s*(.*)?$/);
-  if (!dateMatch) return null;
-
-  const date  = dateMatch[1];
-  const rest  = (dateMatch[2] || '').trim();
-
-  // Bodyweight shorthand: YYYY-MM-DD | <number>
-  if (/^\d+(\.\d+)?$/.test(rest)) {
-    return { type: 'bodyweight', date, weight: parseFloat(rest) };
-  }
-
-  // Workout shorthand
-  const notes    = rest;
-  const exercises = [];
-
-  for (let i = 1; i < lines.length; i++) {
-    const line = lines[i].trim();
-    if (!line) continue;
-    // "Exercise name: weightxreps, weightxreps"
-    const m = line.match(/^(.+?):\s*(.+)$/);
-    if (!m) continue;
-    const rawName = m[1].trim();
-    const name    = normaliseExerciseName(rawName);
-    const setStrs = m[2].split(',').map(s=>s.trim()).filter(Boolean);
-    const sets    = [];
-    let count     = 1;
-
-    // Check for repeated set notation like "3x 80x5" — but our format uses weightXreps
-    setStrs.forEach(ss => {
-      // Format: weightXreps  e.g. 100x5  or  100X5
-      const sm = ss.match(/^(\d+(?:\.\d+)?)[xX](\d+)$/);
-      if (sm) {
-        sets.push({ weight_kg: parseFloat(sm[1]), reps: parseInt(sm[2]) });
-      }
-    });
-
-    if (sets.length) exercises.push({ name, sets });
-  }
-
-  if (!exercises.length) return null;
-  return { type: 'workout', date, notes, exercises };
-}
-
-// Compute total volume for a single workout (kg × reps summed)
-function workoutVolume(w) {
-  return w.exercises.reduce((t, ex) => t + ex.sets.reduce((s, set) => s + set.weight_kg * set.reps, 0), 0);
-}
-
-// Check if a date string falls within the current Mon–Sun calendar week
-function isThisWeek(dateStr) {
-  const d = new Date(dateStr + 'T12:00:00');
-  const now = new Date();
-  const day = now.getDay() || 7;
-  const mon = new Date(now); mon.setHours(0,0,0,0); mon.setDate(now.getDate() - day + 1);
-  const sun = new Date(mon); sun.setDate(mon.getDate() + 6); sun.setHours(23,59,59,999);
-  return d >= mon && d <= sun;
-}
-
-async function loadAllData() {
-  // Show loading state
-  document.getElementById('dash-content').innerHTML = `<div class="loading">Fetching archives…</div>`;
-
-  try {
-    // 1. List raw files
-    let rawFiles = [];
-    try {
-      const listing = await ghGet('data/raw');
-      rawFiles = Array.isArray(listing) ? listing.filter(f => f.name.endsWith('.txt')) : [];
-    } catch(e) { /* directory may not exist yet */ }
-
-    // 2. Parse each raw file
-    const entries = await Promise.all(rawFiles.map(async f => {
+    async function saveAliases() {
+      const st = document.getElementById('alias-status');
+      st.className = 'status-msg'; st.textContent = 'Saving aliases…';
       try {
-        const d = await ghGet(f.path);
-        return parseEntry(b64d(d.content));
-      } catch(e) { return null; }
-    }));
-
-    // 3. Separate workouts from bodyweight
-    WORKOUTS   = entries.filter(e => e && e.type === 'workout').sort((a,b) => a.date.localeCompare(b.date));
-    BODYWEIGHT = entries.filter(e => e && e.type === 'bodyweight').sort((a,b) => a.date.localeCompare(b.date));
-
-    // 4. Render all tabs
-    renderDashboard();
-    renderLog();
-    renderProgress();
-    renderExerciseHistory();
-
-  } catch(e) {
-    document.getElementById('dash-content').innerHTML = `<div class="empty-state">Archive inaccessible.<br>Verify GitHub configuration.</div>`;
-  }
-}
-
-// ──────────────────────────────────────────────────────────────
-// SUBMIT RECORD
-// Writes raw text to data/raw/YYYY-MM-DD-<ms>.txt on GitHub
-// ──────────────────────────────────────────────────────────────
-
-async function submitRecord() {
-  const text = document.getElementById('record-input').value.trim();
-  if (!text) return;
-
-  const dateMatch = text.match(/^(\d{4}-\d{2}-\d{2})/);
-  if (!dateMatch) { setRecordStatus('err', 'First line must start with YYYY-MM-DD.'); return; }
-
-  const timestamp = Date.now().toString().slice(-6);
-  const filename  = `data/raw/${dateMatch[1]}-${timestamp}.txt`;
-
-  const btn = document.getElementById('commit-btn');
-  btn.disabled = true;
-  setRecordStatus('', 'Committing to GitHub…');
-
-  try {
-    // Check if file already exists (shouldn't, but be safe)
-    const sha = await ghGetSha(filename);
-    await ghPut(filename, `log: record ${dateMatch[1]}`, text, sha);
-    setRecordStatus('ok', '✓ Committed. Reloading data…');
-    document.getElementById('record-input').value = '';
-    // Reload after short delay to let GitHub propagate
-    setTimeout(() => loadAllData(), 2000);
-  } catch(e) {
-    setRecordStatus('err', '✗ '+e.message);
-  } finally {
-    btn.disabled = false;
-  }
-}
-
-function setRecordStatus(type, msg) {
-  const el = document.getElementById('record-status');
-  el.className = 'status-msg' + (type ? ' '+type : '');
-  el.textContent = msg;
-}
-
-// Reprocess: re-read all raw files and refresh UI
-async function triggerReprocess() {
-  const el = document.getElementById('reprocess-status');
-  el.className = 'status-msg'; el.textContent = 'Reprocessing…';
-  try {
-    await loadAllData();
-    el.className = 'status-msg ok'; el.textContent = '✓ Reprocessed.';
-  } catch(e) {
-    el.className = 'status-msg err'; el.textContent = '✗ '+e.message;
-  }
-}
-
-// ──────────────────────────────────────────────────────────────
-// SET CHIP HELPER
-// ──────────────────────────────────────────────────────────────
-
-function chips(sets) {
-  return sets.map(s => `<span class="set-chip">${s.weight_kg}kg×${s.reps}</span>`).join('');
-}
-
-// ──────────────────────────────────────────────────────────────
-// PRESTIGE TRACKER  (scaled to 24 workouts per cycle)
-// Tube-map style: start node → 8 blue → 8 green → 8 red → gold end
-// ──────────────────────────────────────────────────────────────
-
-function renderPrestigeHTML() {
-  const total    = WORKOUTS.length;
-  const prestige = total === 0 ? 0 : Math.floor((total - 1) / 24);
-  const current  = total === 0 ? 0 : ((total - 1) % 24) + 1;
-
-  let html = `<div class="section-title" style="margin-top:2.5rem;">Cycle Tracker — Prestige ${prestige}</div>`;
-  html += `<div class="cycle-wrap"><div class="tube-scroll"><div class="tube-map">`;
-
-  for (let i = 0; i <= 24; i++) {
-    let col, size;
-
-    if (i === 0) {
-      col = 'var(--accent)'; size = 'xl';          // Bronze start node
-    } else if (i <= 8) {
-      col = 'var(--phase-acc)'; size = (i%4===0)?'lg':'sm';   // Blue phase
-    } else if (i <= 16) {
-      col = 'var(--phase-str)'; size = (i%4===0)?'lg':'sm';   // Green phase
-    } else {
-      col = 'var(--phase-pek)'; size = (i%4===0)?'lg':'sm';   // Red phase
-      if (i === 24) { col = '#D4AF37'; size = 'xl'; }          // Gold finisher
+        const res = await ghPut('data/aliases.json', 'update: exercise aliases', JSON.stringify(ALIASES, null, 2), ALIAS_SHA);
+        ALIAS_SHA = res.content.sha;
+        st.className = 'status-msg ok'; st.textContent = '✓ Aliases saved.';
+        // Reload data so normalisation picks up new aliases
+        await loadAllData();
+      } catch (e) {
+        st.className = 'status-msg err'; st.textContent = '✗ ' + e.message;
+      }
     }
 
-    const isLit  = (i <= current);
-    const opacity = isLit ? 1 : 0.18;
+    // ──────────────────────────────────────────────────────────────
+    // DATA LOADING
+    // Reads raw .txt files from data/raw/, parses them client-side,
+    // then reads/writes JSON to data/json/ for persistence.
+    // ──────────────────────────────────────────────────────────────
 
-    // Connector line between nodes
-    if (i > 0) {
-      const lineW = size === 'xl' ? 20 : size === 'lg' ? 16 : 10;
-      html += `<div class="t-line" style="width:${lineW}px; background:${isLit ? col : 'var(--border)'}; height:4px;"></div>`;
+    let WORKOUTS = [];   // All strength workouts, sorted ascending by date
+    let BODYWEIGHT = [];   // [{date, weight}] sorted ascending
+
+    // Parse shorthand text into a workout object (or bodyweight entry)
+    function parseEntry(text) {
+      const lines = text.trim().split('\n').filter(l => l.trim());
+      if (!lines.length) return null;
+
+      // Header: YYYY-MM-DD | something
+      const header = lines[0];
+      const dateMatch = header.match(/^(\d{4}-\d{2}-\d{2})\s*\|?\s*(.*)?$/);
+      if (!dateMatch) return null;
+
+      const date = dateMatch[1];
+      const rest = (dateMatch[2] || '').trim();
+
+      // Bodyweight shorthand: YYYY-MM-DD | <number>
+      if (/^\d+(\.\d+)?$/.test(rest)) {
+        return { type: 'bodyweight', date, weight: parseFloat(rest) };
+      }
+
+      // Workout shorthand
+      const notes = rest;
+      const exercises = [];
+
+      for (let i = 1; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (!line) continue;
+        // "Exercise name: weightxreps, weightxreps"
+        const m = line.match(/^(.+?):\s*(.+)$/);
+        if (!m) continue;
+        const rawName = m[1].trim();
+        const name = normaliseExerciseName(rawName);
+        const setStrs = m[2].split(',').map(s => s.trim()).filter(Boolean);
+        const sets = [];
+        let count = 1;
+
+        // Check for repeated set notation like "3x 80x5" — but our format uses weightXreps
+        setStrs.forEach(ss => {
+          // Format: weightXreps  e.g. 100x5  or  100X5
+          const sm = ss.match(/^(\d+(?:\.\d+)?)[xX](\d+)$/);
+          if (sm) {
+            sets.push({ weight_kg: parseFloat(sm[1]), reps: parseInt(sm[2]) });
+          }
+        });
+
+        if (sets.length) exercises.push({ name, sets });
+      }
+
+      if (!exercises.length) return null;
+      return { type: 'workout', date, notes, exercises };
     }
 
-    // Node dot (or prestige hexagon for start)
-    let dotSize = 12;
-    if (size === 'lg') dotSize = 22;
-    if (size === 'xl') dotSize = 44;
+    // Compute total volume for a single workout (kg × reps summed)
+    function workoutVolume(w) {
+      return w.exercises.reduce((t, ex) => t + ex.sets.reduce((s, set) => s + set.weight_kg * set.reps, 0), 0);
+    }
 
-    if (i === 0) {
-      // Metallic bronze hexagon — prestige counter
-      html += `
+    // Check if a date string falls within the current Mon–Sun calendar week
+    function isThisWeek(dateStr) {
+      const d = new Date(dateStr + 'T12:00:00');
+      const now = new Date();
+      const day = now.getDay() || 7;
+      const mon = new Date(now); mon.setHours(0, 0, 0, 0); mon.setDate(now.getDate() - day + 1);
+      const sun = new Date(mon); sun.setDate(mon.getDate() + 6); sun.setHours(23, 59, 59, 999);
+      return d >= mon && d <= sun;
+    }
+
+    async function loadAllData() {
+      document.getElementById('dash-content').innerHTML = `<div class="loading">Fetching archives…</div>`;
+
+      try {
+        // 1. Get directory listing via GitHub Contents API (needs auth, returns metadata + download_url)
+        let rawFiles = [];
+        try {
+          const listing = await ghGet('data/raw');
+          rawFiles = Array.isArray(listing) ? listing.filter(f => f.name.endsWith('.txt')) : [];
+        } catch (e) { /* folder doesn't exist yet — first run */ }
+
+        // 2. Fetch file *contents* using download_url (raw.githubusercontent.com — no auth needed,
+        //    no rate-limit issues, much faster than individual Contents API calls per file)
+        const entries = await Promise.all(rawFiles.map(async f => {
+          try {
+            // download_url looks like:
+            // https://raw.githubusercontent.com/user/repo/main/data/raw/filename.txt
+            const r = await fetch(f.download_url);
+            if (!r.ok) return null;
+            const text = await r.text();
+            return parseEntry(text);
+          } catch (e) { return null; }
+        }));
+
+        // 3. Separate workouts from bodyweight entries
+        WORKOUTS = entries.filter(e => e && e.type === 'workout').sort((a, b) => a.date.localeCompare(b.date));
+        BODYWEIGHT = entries.filter(e => e && e.type === 'bodyweight').sort((a, b) => a.date.localeCompare(b.date));
+
+        // 4. Render all tabs
+        renderDashboard();
+        renderLog();
+        renderProgress();
+        renderExerciseHistory();
+
+      } catch (e) {
+        document.getElementById('dash-content').innerHTML =
+          `<div class="empty-state">Archive inaccessible.<br>Verify GitHub configuration.<br><small style="font-size:0.75rem;opacity:0.7;">${e.message}</small></div>`;
+      }
+    }
+
+    // ──────────────────────────────────────────────────────────────
+    // SUBMIT RECORD
+    // Writes raw text to data/raw/YYYY-MM-DD-<ms>.txt on GitHub
+    // ──────────────────────────────────────────────────────────────
+
+    async function submitRecord() {
+      const text = document.getElementById('record-input').value.trim();
+      if (!text) return;
+
+      const dateMatch = text.match(/^(\d{4}-\d{2}-\d{2})/);
+      if (!dateMatch) { setRecordStatus('err', 'First line must start with YYYY-MM-DD.'); return; }
+
+      const timestamp = Date.now().toString().slice(-6);
+      const filename = `data/raw/${dateMatch[1]}-${timestamp}.txt`;
+
+      const btn = document.getElementById('commit-btn');
+      btn.disabled = true;
+      setRecordStatus('', 'Committing to GitHub…');
+
+      try {
+        // Check if file already exists (shouldn't, but be safe)
+        const sha = await ghGetSha(filename);
+        await ghPut(filename, `log: record ${dateMatch[1]}`, text, sha);
+        setRecordStatus('ok', '✓ Committed. Reloading data…');
+        document.getElementById('record-input').value = '';
+        // Reload after short delay to let GitHub propagate
+        setTimeout(() => loadAllData(), 2000);
+      } catch (e) {
+        setRecordStatus('err', '✗ ' + e.message);
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    function setRecordStatus(type, msg) {
+      const el = document.getElementById('record-status');
+      el.className = 'status-msg' + (type ? ' ' + type : '');
+      el.textContent = msg;
+    }
+
+    // Reprocess: re-read all raw files and refresh UI
+    async function triggerReprocess() {
+      const el = document.getElementById('reprocess-status');
+      el.className = 'status-msg'; el.textContent = 'Reprocessing…';
+      try {
+        await loadAllData();
+        el.className = 'status-msg ok'; el.textContent = '✓ Reprocessed.';
+      } catch (e) {
+        el.className = 'status-msg err'; el.textContent = '✗ ' + e.message;
+      }
+    }
+
+    // ──────────────────────────────────────────────────────────────
+    // SET CHIP HELPER
+    // ──────────────────────────────────────────────────────────────
+
+    function chips(sets) {
+      return sets.map(s => `<span class="set-chip">${s.weight_kg}kg×${s.reps}</span>`).join('');
+    }
+
+    // ──────────────────────────────────────────────────────────────
+    // PRESTIGE TRACKER  (scaled to 24 workouts per cycle)
+    // Tube-map style: start node → 8 blue → 8 green → 8 red → gold end
+    // ──────────────────────────────────────────────────────────────
+
+    function renderPrestigeHTML() {
+      const total = WORKOUTS.length;
+      const prestige = total === 0 ? 0 : Math.floor((total - 1) / 24);
+      const current = total === 0 ? 0 : ((total - 1) % 24) + 1;
+
+      let html = `<div class="section-title" style="margin-top:2.5rem;">Cycle Tracker — Prestige ${prestige}</div>`;
+      html += `<div class="cycle-wrap"><div class="tube-scroll"><div class="tube-map">`;
+
+      for (let i = 0; i <= 24; i++) {
+        let col, size;
+
+        if (i === 0) {
+          col = 'var(--accent)'; size = 'xl';          // Bronze start node
+        } else if (i <= 8) {
+          col = 'var(--phase-acc)'; size = (i % 4 === 0) ? 'lg' : 'sm';   // Blue phase
+        } else if (i <= 16) {
+          col = 'var(--phase-str)'; size = (i % 4 === 0) ? 'lg' : 'sm';   // Green phase
+        } else {
+          col = 'var(--phase-pek)'; size = (i % 4 === 0) ? 'lg' : 'sm';   // Red phase
+          if (i === 24) { col = '#D4AF37'; size = 'xl'; }          // Gold finisher
+        }
+
+        const isLit = (i <= current);
+        const opacity = isLit ? 1 : 0.18;
+
+        // Connector line between nodes
+        if (i > 0) {
+          const lineW = size === 'xl' ? 20 : size === 'lg' ? 16 : 10;
+          html += `<div class="t-line" style="width:${lineW}px; background:${isLit ? col : 'var(--border)'}; height:4px;"></div>`;
+        }
+
+        // Node dot (or prestige hexagon for start)
+        let dotSize = 12;
+        if (size === 'lg') dotSize = 22;
+        if (size === 'xl') dotSize = 44;
+
+        if (i === 0) {
+          // Metallic bronze hexagon — prestige counter
+          html += `
       <div style="position:relative;width:${dotSize}px;height:${dotSize}px;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
         <div style="position:absolute;width:100%;height:100%;background:linear-gradient(135deg,#e3a869 0%,#b87333 30%,#8b4513 70%,#e3a869 100%);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);z-index:1;display:flex;align-items:center;justify-content:center;">
           <div style="width:82%;height:82%;background:linear-gradient(to bottom right,#b87333,#5a2e0a);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:flex;align-items:center;justify-content:center;">
-            <span style="color:#fff;font-family:'Georgia',serif;font-size:${dotSize*0.35}px;font-weight:normal;text-shadow:1px 1px 2px rgba(0,0,0,0.6);">${prestige}</span>
+            <span style="color:#fff;font-family:'Georgia',serif;font-size:${dotSize * 0.35}px;font-weight:normal;text-shadow:1px 1px 2px rgba(0,0,0,0.6);">${prestige}</span>
           </div>
         </div>
       </div>`;
-    } else {
-      html += `<div style="width:${dotSize}px;height:${dotSize}px;background:${col};opacity:${opacity};border-radius:50%;flex-shrink:0;"></div>`;
-    }
-  }
-
-  html += `</div></div></div>`;
-  return html;
-}
-
-// ──────────────────────────────────────────────────────────────
-// BODYWEIGHT CHART
-// ──────────────────────────────────────────────────────────────
-
-let bwChart = null;
-
-function renderBodyweightChart(containerId) {
-  const canvas = document.getElementById(containerId);
-  if (!canvas) return;
-  if (bwChart) { bwChart.destroy(); bwChart = null; }
-
-  if (!BODYWEIGHT.length) {
-    canvas.parentElement.innerHTML = `<div class="empty-state" style="padding:1.5rem;">No bodyweight data yet.<br>Log as: YYYY-MM-DD | weight</div>`;
-    return;
-  }
-
-  const points = BODYWEIGHT.map(b => ({ x: new Date(b.date).getTime(), y: b.weight }));
-
-  bwChart = new Chart(canvas, {
-    type: 'line',
-    data: {
-      datasets: [{
-        data: points,
-        borderColor: 'var(--accent)',
-        backgroundColor: 'rgba(163,63,31,0.07)',
-        borderWidth: 2,
-        pointBackgroundColor: 'var(--accent)',
-        pointRadius: 4,
-        tension: 0.25,
-        fill: true
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: {
-        x: {
-          type: 'time',
-          time: { unit: 'day', tooltipFormat: 'yyyy-MM-dd', displayFormats: { day: 'd MMM', month: 'MMM yy' } },
-          grid: { color: '#EBE5DA' },
-          ticks: { color: '#595959', font: { family: 'inherit', size: 10 }, maxTicksLimit: 6 }
-        },
-        y: {
-          grid: { color: '#EBE5DA' },
-          ticks: { color: '#595959', font: { family: 'inherit', size: 11 } }
+        } else {
+          html += `<div style="width:${dotSize}px;height:${dotSize}px;background:${col};opacity:${opacity};border-radius:50%;flex-shrink:0;"></div>`;
         }
       }
+
+      html += `</div></div></div>`;
+      return html;
     }
-  });
-}
 
-// ──────────────────────────────────────────────────────────────
-// DASHBOARD TAB
-// ──────────────────────────────────────────────────────────────
+    // ──────────────────────────────────────────────────────────────
+    // BODYWEIGHT CHART
+    // ──────────────────────────────────────────────────────────────
 
-function renderDashboard() {
-  let html = '';
+    let bwChart = null;
 
-  if (!WORKOUTS.length) {
-    html += `<div class="empty-state">No workouts recorded yet.<br>Use the Record tab to add your first session.</div>`;
-  } else {
-    const last        = WORKOUTS[WORKOUTS.length - 1];
-    const sessionNum  = WORKOUTS.length;
-    const weekSess    = WORKOUTS.filter(w => isThisWeek(w.date)).length;
-    const totalVol    = Math.round(WORKOUTS.reduce((t,w)=>t+workoutVolume(w),0));
-    const weekVol     = Math.round(WORKOUTS.filter(w=>isThisWeek(w.date)).reduce((t,w)=>t+workoutVolume(w),0));
+    function renderBodyweightChart(containerId) {
+      const canvas = document.getElementById(containerId);
+      if (!canvas) return;
+      if (bwChart) { bwChart.destroy(); bwChart = null; }
 
-    // Latest workout card
-    const exHTML = last.exercises.map(ex => `
+      if (!BODYWEIGHT.length) {
+        canvas.parentElement.innerHTML = `<div class="empty-state" style="padding:1.5rem;">No bodyweight data yet.<br>Log as: YYYY-MM-DD | weight</div>`;
+        return;
+      }
+
+      const points = BODYWEIGHT.map(b => ({ x: new Date(b.date).getTime(), y: b.weight }));
+
+      bwChart = new Chart(canvas, {
+        type: 'line',
+        data: {
+          datasets: [{
+            data: points,
+            borderColor: 'var(--accent)',
+            backgroundColor: 'rgba(163,63,31,0.07)',
+            borderWidth: 2,
+            pointBackgroundColor: 'var(--accent)',
+            pointRadius: 4,
+            tension: 0.25,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: {
+              type: 'time',
+              time: { unit: 'day', tooltipFormat: 'yyyy-MM-dd', displayFormats: { day: 'd MMM', month: 'MMM yy' } },
+              grid: { color: '#EBE5DA' },
+              ticks: { color: '#595959', font: { family: 'inherit', size: 10 }, maxTicksLimit: 6 }
+            },
+            y: {
+              grid: { color: '#EBE5DA' },
+              ticks: { color: '#595959', font: { family: 'inherit', size: 11 } }
+            }
+          }
+        }
+      });
+    }
+
+    // ──────────────────────────────────────────────────────────────
+    // DASHBOARD TAB
+    // ──────────────────────────────────────────────────────────────
+
+    function renderDashboard() {
+      let html = '';
+
+      if (!WORKOUTS.length) {
+        html += `<div class="empty-state">No workouts recorded yet.<br>Use the Record tab to add your first session.</div>`;
+      } else {
+        const last = WORKOUTS[WORKOUTS.length - 1];
+        const sessionNum = WORKOUTS.length;
+        const weekSess = WORKOUTS.filter(w => isThisWeek(w.date)).length;
+        const totalVol = Math.round(WORKOUTS.reduce((t, w) => t + workoutVolume(w), 0));
+        const weekVol = Math.round(WORKOUTS.filter(w => isThisWeek(w.date)).reduce((t, w) => t + workoutVolume(w), 0));
+
+        // Latest workout card
+        const exHTML = last.exercises.map(ex => `
       <div class="exercise-row">
         <div class="ex-name">${ex.name}</div>
         <div class="sets-row">${chips(ex.sets)}</div>
       </div>`).join('');
 
-    html += `
+        html += `
     <div class="section-title">Latest Session</div>
     <div class="card">
       <div class="session-header">
@@ -1140,47 +1412,47 @@ function renderDashboard() {
       <div class="card"><div class="card-label">Total Sessions</div><div class="card-value">${sessionNum}</div><div class="card-sub">All-time</div></div>
       <div class="card"><div class="card-label">Total Volume</div><div class="card-value">${totalVol.toLocaleString()}</div><div class="card-sub">kg all-time</div></div>
     </div>`;
-  }
+      }
 
-  // Prestige tracker
-  html += renderPrestigeHTML();
+      // Prestige tracker
+      html += renderPrestigeHTML();
 
-  // Bodyweight section
-  html += `
+      // Bodyweight section
+      html += `
   <div class="section-title" style="margin-top:2.5rem;">Bodyweight</div>
   <div class="card">
     <div class="bw-chart-wrap"><canvas id="bw-chart"></canvas></div>
   </div>`;
 
-  document.getElementById('dash-content').innerHTML = html;
+      document.getElementById('dash-content').innerHTML = html;
 
-  // Render bodyweight chart after DOM update
-  requestAnimationFrame(() => renderBodyweightChart('bw-chart'));
-}
+      // Render bodyweight chart after DOM update
+      requestAnimationFrame(() => renderBodyweightChart('bw-chart'));
+    }
 
-// ──────────────────────────────────────────────────────────────
-// LOG TAB — chronological archive of all workouts
-// ──────────────────────────────────────────────────────────────
+    // ──────────────────────────────────────────────────────────────
+    // LOG TAB — chronological archive of all workouts
+    // ──────────────────────────────────────────────────────────────
 
-function renderLog() {
-  if (!WORKOUTS.length) {
-    document.getElementById('log-content').innerHTML = `<div class="empty-state">No workouts recorded yet.</div>`;
-    return;
-  }
+    function renderLog() {
+      if (!WORKOUTS.length) {
+        document.getElementById('log-content').innerHTML = `<div class="empty-state">No workouts recorded yet.</div>`;
+        return;
+      }
 
-  const reversed = [...WORKOUTS].reverse();
-  let html = `<div class="section-title">Workout Archive — ${WORKOUTS.length} sessions</div>`;
+      const reversed = [...WORKOUTS].reverse();
+      let html = `<div class="section-title">Workout Archive — ${WORKOUTS.length} sessions</div>`;
 
-  html += reversed.map((w, ri) => {
-    const num    = WORKOUTS.length - ri;   // Count from total downward (latest = highest number)
-    const isLast = ri === 0;
-    const exHTML = w.exercises.map(ex => `
+      html += reversed.map((w, ri) => {
+        const num = WORKOUTS.length - ri;   // Count from total downward (latest = highest number)
+        const isLast = ri === 0;
+        const exHTML = w.exercises.map(ex => `
       <div class="exercise-row">
         <div class="ex-name">${ex.name}</div>
         <div class="sets-row">${chips(ex.sets)}</div>
       </div>`).join('');
 
-    return `
+        return `
     <div class="all-session-block">
       <div class="all-session-hdr">
         <div class="all-session-left">
@@ -1195,234 +1467,235 @@ function renderLog() {
         ${w.notes ? `<div class="card-sub" style="margin-top:1rem;padding-top:0.75rem;border-top:1px solid var(--border);">${w.notes}</div>` : ''}
       </div>
     </div>`;
-  }).join('');
+      }).join('');
 
-  document.getElementById('log-content').innerHTML = html;
-}
+      document.getElementById('log-content').innerHTML = html;
+    }
 
-// ──────────────────────────────────────────────────────────────
-// PROGRESS TAB — one graph per exercise
-// ──────────────────────────────────────────────────────────────
+    // ──────────────────────────────────────────────────────────────
+    // PROGRESS TAB — one graph per exercise
+    // ──────────────────────────────────────────────────────────────
 
-let progressCharts = [];
+    let progressCharts = [];
 
-// Rep range → colour
-function repColour(reps) {
-  if (reps <= 5) return getComputedStyle(document.documentElement).getPropertyValue('--rep-low').trim()   || '#1976D2';
-  if (reps <= 8) return getComputedStyle(document.documentElement).getPropertyValue('--rep-mid').trim()   || '#F57C00';
-  return               getComputedStyle(document.documentElement).getPropertyValue('--rep-high').trim()   || '#43A047';
-}
+    // Rep range → colour
+    function repColour(reps) {
+      if (reps <= 5) return getComputedStyle(document.documentElement).getPropertyValue('--rep-low').trim() || '#1976D2';
+      if (reps <= 8) return getComputedStyle(document.documentElement).getPropertyValue('--rep-mid').trim() || '#F57C00';
+      return getComputedStyle(document.documentElement).getPropertyValue('--rep-high').trim() || '#43A047';
+    }
 
-// For each exercise session, pick the "best" set:
-// Highest weight; among ties, highest reps.
-function bestSet(sets) {
-  return sets.reduce((best, s) => {
-    if (s.weight_kg > best.weight_kg) return s;
-    if (s.weight_kg === best.weight_kg && s.reps > best.reps) return s;
-    return best;
-  }, sets[0]);
-}
+    // For each exercise session, pick the "best" set:
+    // Highest weight; among ties, highest reps.
+    function bestSet(sets) {
+      return sets.reduce((best, s) => {
+        if (s.weight_kg > best.weight_kg) return s;
+        if (s.weight_kg === best.weight_kg && s.reps > best.reps) return s;
+        return best;
+      }, sets[0]);
+    }
 
-function renderProgress() {
-  // Destroy old charts
-  progressCharts.forEach(c => c.destroy());
-  progressCharts = [];
+    function renderProgress() {
+      // Destroy old charts
+      progressCharts.forEach(c => c.destroy());
+      progressCharts = [];
 
-  if (!WORKOUTS.length) {
-    document.getElementById('progress-content').innerHTML = `<div class="empty-state">No workouts recorded yet.</div>`;
-    return;
-  }
+      if (!WORKOUTS.length) {
+        document.getElementById('progress-content').innerHTML = `<div class="empty-state">No workouts recorded yet.</div>`;
+        return;
+      }
 
-  // Collect all exercise names (already normalised via aliases)
-  const names = [...new Set(WORKOUTS.flatMap(w => w.exercises.map(e => e.name)))].sort();
+      // Collect all exercise names (already normalised via aliases)
+      const names = [...new Set(WORKOUTS.flatMap(w => w.exercises.map(e => e.name)))].sort();
 
-  const legend = `
+      const legend = `
   <div class="rep-legend">
     <div class="rep-legend-item"><div class="rep-swatch" style="background:var(--rep-low)"></div>1–5 reps (heavy)</div>
     <div class="rep-legend-item"><div class="rep-swatch" style="background:var(--rep-mid)"></div>6–8 reps (moderate)</div>
     <div class="rep-legend-item"><div class="rep-swatch" style="background:var(--rep-high)"></div>9+ reps (volume)</div>
   </div>`;
 
-  let html = `<div class="section-title">Progress</div>${legend}`;
+      let html = `<div class="section-title">Progress</div>${legend}`;
 
-  const toChart = [];
+      const toChart = [];
 
-  names.forEach(name => {
-    const cid = `prog-${name.replace(/[^a-z0-9]/gi,'-').toLowerCase()}`;
+      names.forEach(name => {
+        const cid = `prog-${name.replace(/[^a-z0-9]/gi, '-').toLowerCase()}`;
 
-    // Gather one data point per workout session that contains this exercise
-    const dataPoints = [];
-    WORKOUTS.forEach(w => {
-      const ex = w.exercises.find(e => e.name === name);
-      if (!ex) return;
-      const s = bestSet(ex.sets);
-      dataPoints.push({ date: w.date, weight: s.weight_kg, reps: s.reps });
-    });
+        // Gather one data point per workout session that contains this exercise
+        const dataPoints = [];
+        WORKOUTS.forEach(w => {
+          const ex = w.exercises.find(e => e.name === name);
+          if (!ex) return;
+          const s = bestSet(ex.sets);
+          dataPoints.push({ date: w.date, weight: s.weight_kg, reps: s.reps });
+        });
 
-    if (!dataPoints.length) return;
+        if (!dataPoints.length) return;
 
-    html += `
+        html += `
     <div class="card progress-ex-block" style="margin-bottom:1.5rem;">
       <div class="progress-ex-title">${name}</div>
       <div class="chart-wrap"><canvas id="${cid}"></canvas></div>
     </div>`;
 
-    toChart.push({ cid, dataPoints, name });
-  });
+        toChart.push({ cid, dataPoints, name });
+      });
 
-  document.getElementById('progress-content').innerHTML = html;
+      document.getElementById('progress-content').innerHTML = html;
 
-  requestAnimationFrame(() => {
-    toChart.forEach(({ cid, dataPoints }) => {
-      const ctx = document.getElementById(cid);
-      if (!ctx) return;
+      requestAnimationFrame(() => {
+        toChart.forEach(({ cid, dataPoints }) => {
+          const ctx = document.getElementById(cid);
+          if (!ctx) return;
 
-      // Build scatter datasets grouped by rep range (for colour coding)
-      // We use a single scatter dataset with per-point colours via a workaround:
-      // build one dataset per point (expensive for many points) OR use a plugin.
-      // Simpler: use a single scatter dataset with pointBackgroundColor array.
-      const pts = dataPoints.map(p => ({ x: new Date(p.date).getTime(), y: p.weight, reps: p.reps }));
+          // Build scatter datasets grouped by rep range (for colour coding)
+          // We use a single scatter dataset with per-point colours via a workaround:
+          // build one dataset per point (expensive for many points) OR use a plugin.
+          // Simpler: use a single scatter dataset with pointBackgroundColor array.
+          const pts = dataPoints.map(p => ({ x: new Date(p.date).getTime(), y: p.weight, reps: p.reps }));
 
-      const chart = new Chart(ctx, {
-        type: 'scatter',
-        data: {
-          datasets: [{
-            data: pts,
-            pointBackgroundColor: pts.map(p => repColour(p.reps)),
-            pointBorderColor:     pts.map(p => repColour(p.reps)),
-            pointRadius: 6,
-            pointHoverRadius: 8,
-            showLine: true,
-            borderColor: 'rgba(163,63,31,0.25)',
-            borderWidth: 1.5,
-            tension: 0.1
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              callbacks: {
-                label: ctx => {
-                  const p = ctx.raw;
-                  return `${p.y}kg × ${p.reps} reps`;
+          const chart = new Chart(ctx, {
+            type: 'scatter',
+            data: {
+              datasets: [{
+                data: pts,
+                pointBackgroundColor: pts.map(p => repColour(p.reps)),
+                pointBorderColor: pts.map(p => repColour(p.reps)),
+                pointRadius: 6,
+                pointHoverRadius: 8,
+                showLine: true,
+                borderColor: 'rgba(163,63,31,0.25)',
+                borderWidth: 1.5,
+                tension: 0.1
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  callbacks: {
+                    label: ctx => {
+                      const p = ctx.raw;
+                      return `${p.y}kg × ${p.reps} reps`;
+                    }
+                  }
+                }
+              },
+              scales: {
+                x: {
+                  type: 'time',
+                  time: { unit: 'day', tooltipFormat: 'yyyy-MM-dd', displayFormats: { day: 'd MMM', month: 'MMM yy' } },
+                  grid: { color: '#EBE5DA' },
+                  ticks: { color: '#595959', font: { family: 'inherit', size: 10 }, maxTicksLimit: 6 }
+                },
+                y: {
+                  title: { display: true, text: 'Weight (kg)', color: '#8C8C8C', font: { family: 'inherit', size: 11 } },
+                  grid: { color: '#EBE5DA' },
+                  ticks: { color: '#595959', font: { family: 'inherit', size: 11 } }
                 }
               }
             }
-          },
-          scales: {
-            x: {
-              type: 'time',
-              time: { unit: 'day', tooltipFormat: 'yyyy-MM-dd', displayFormats: { day: 'd MMM', month: 'MMM yy' } },
-              grid: { color: '#EBE5DA' },
-              ticks: { color: '#595959', font: { family: 'inherit', size: 10 }, maxTicksLimit: 6 }
-            },
-            y: {
-              title: { display: true, text: 'Weight (kg)', color: '#8C8C8C', font: { family: 'inherit', size: 11 } },
-              grid: { color: '#EBE5DA' },
-              ticks: { color: '#595959', font: { family: 'inherit', size: 11 } }
-            }
-          }
-        }
+          });
+
+          progressCharts.push(chart);
+        });
       });
+    }
 
-      progressCharts.push(chart);
-    });
-  });
-}
+    // ──────────────────────────────────────────────────────────────
+    // EXERCISE HISTORY  (logo double-tap panel)
+    // Last 3 sessions per exercise, alphabetical
+    // ──────────────────────────────────────────────────────────────
 
-// ──────────────────────────────────────────────────────────────
-// EXERCISE HISTORY  (logo double-tap panel)
-// Last 3 sessions per exercise, alphabetical
-// ──────────────────────────────────────────────────────────────
+    function renderExerciseHistory() {
+      if (!WORKOUTS.length) {
+        document.getElementById('all-content').innerHTML = `<div class="empty-state">No workouts recorded yet.</div>`;
+        return;
+      }
 
-function renderExerciseHistory() {
-  if (!WORKOUTS.length) {
-    document.getElementById('all-content').innerHTML = `<div class="empty-state">No workouts recorded yet.</div>`;
-    return;
-  }
+      const names = [...new Set(WORKOUTS.flatMap(w => w.exercises.map(e => e.name)))].sort();
 
-  const names = [...new Set(WORKOUTS.flatMap(w => w.exercises.map(e => e.name)))].sort();
+      let html = '';
+      names.forEach(name => {
+        // Find the last 3 sessions that contain this exercise, most recent first
+        const sessions = WORKOUTS.filter(w => w.exercises.some(e => e.name === name)).slice(-3).reverse();
 
-  let html = '';
-  names.forEach(name => {
-    // Find the last 3 sessions that contain this exercise, most recent first
-    const sessions = WORKOUTS.filter(w => w.exercises.some(e => e.name === name)).slice(-3).reverse();
-
-    const rows = sessions.map((w, ri) => {
-      const ex  = w.exercises.find(e => e.name === name);
-      const tag = ri === 0 ? `<span class="recency-latest">Latest</span>` : '';
-      return `
+        const rows = sessions.map((w, ri) => {
+          const ex = w.exercises.find(e => e.name === name);
+          const tag = ri === 0 ? `<span class="recency-latest">Latest</span>` : '';
+          return `
       <div class="recent-session-row">
         <div class="rs-date-col"><span class="rs-date">${w.date.slice(5)}</span>${tag}</div>
         <div class="rs-sets">${chips(ex.sets)}</div>
       </div>`;
-    }).join('');
+        }).join('');
 
-    html += `<div class="progress-ex-block card"><div class="progress-ex-title">${name}</div>${rows}</div>`;
-  });
+        html += `<div class="progress-ex-block card"><div class="progress-ex-title">${name}</div>${rows}</div>`;
+      });
 
-  document.getElementById('all-content').innerHTML = html;
-}
+      document.getElementById('all-content').innerHTML = html;
+    }
 
-// ──────────────────────────────────────────────────────────────
-// NAVIGATION
-// ──────────────────────────────────────────────────────────────
+    // ──────────────────────────────────────────────────────────────
+    // NAVIGATION
+    // ──────────────────────────────────────────────────────────────
 
-function switchTab(name, btn) {
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('panel-all').classList.remove('active');
-  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-  document.getElementById('header-plus').classList.remove('active');
+    function switchTab(name, btn) {
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('panel-all').classList.remove('active');
+      document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+      document.getElementById('header-plus').classList.remove('active');
 
-  document.getElementById('panel-' + name).classList.add('active');
-  if (btn) btn.classList.add('active');
-  window.scrollTo(0, 0);
-}
+      document.getElementById('panel-' + name).classList.add('active');
+      if (btn) btn.classList.add('active');
+      window.scrollTo(0, 0);
+    }
 
-function openRecord() {
-  // The + button in the header navigates to the Record tab
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('panel-all').classList.remove('active');
-  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-  document.getElementById('panel-record').classList.add('active');
-  document.getElementById('header-plus').classList.add('active');
-  // Highlight the Record nav button
-  const btns = document.querySelectorAll('nav button');
-  btns.forEach(b => { if (b.textContent.trim() === 'Record') b.classList.add('active'); });
-  window.scrollTo(0, 0);
-}
+    function openRecord() {
+      // The + button in the header navigates to the Record tab
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('panel-all').classList.remove('active');
+      document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+      document.getElementById('panel-record').classList.add('active');
+      document.getElementById('header-plus').classList.add('active');
+      // Highlight the Record nav button
+      const btns = document.querySelectorAll('nav button');
+      btns.forEach(b => { if (b.textContent.trim() === 'Record') b.classList.add('active'); });
+      window.scrollTo(0, 0);
+    }
 
-// ── LOGO DOUBLE-TAP ───────────────────────────────────────────
-let tapCount = 0, tapTimer = null;
-function handleLogoTap() {
-  tapCount++; clearTimeout(tapTimer);
-  if (tapCount >= 2) { tapCount = 0; showAll(); return; }
-  tapTimer = setTimeout(() => { tapCount = 0; }, 400);
-}
+    // ── LOGO DOUBLE-TAP ───────────────────────────────────────────
+    let tapCount = 0, tapTimer = null;
+    function handleLogoTap() {
+      tapCount++; clearTimeout(tapTimer);
+      if (tapCount >= 2) { tapCount = 0; showAll(); return; }
+      tapTimer = setTimeout(() => { tapCount = 0; }, 400);
+    }
 
-function showAll() {
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('panel-all').classList.add('active');
-  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-  document.getElementById('header-plus').classList.remove('active');
-  const logo = document.getElementById('logo');
-  logo.classList.add('flash'); setTimeout(() => logo.classList.remove('flash'), 200);
-  window.scrollTo(0, 0);
-}
+    function showAll() {
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('panel-all').classList.add('active');
+      document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+      document.getElementById('header-plus').classList.remove('active');
+      const logo = document.getElementById('logo');
+      logo.classList.add('flash'); setTimeout(() => logo.classList.remove('flash'), 200);
+      window.scrollTo(0, 0);
+    }
 
-function closeAll() {
-  document.getElementById('panel-all').classList.remove('active');
-  document.getElementById('panel-dashboard').classList.add('active');
-  document.querySelectorAll('nav button')[0].classList.add('active');
-  window.scrollTo(0, 0);
-}
+    function closeAll() {
+      document.getElementById('panel-all').classList.remove('active');
+      document.getElementById('panel-dashboard').classList.add('active');
+      document.querySelectorAll('nav button')[0].classList.add('active');
+      window.scrollTo(0, 0);
+    }
 
-// ── BOOT ─────────────────────────────────────────────────────
-loadConfig();
+    // ── BOOT ─────────────────────────────────────────────────────
+    loadConfig();
 
-</script>
+  </script>
 </body>
+
 </html>
