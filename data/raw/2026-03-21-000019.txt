@@ -1,5 +1,5 @@
-2026-03-21 | solid leg session
-Squat: 122.5x7, 122.5x7, 122.5x7, 122.5x6
-Romanian deadlift: 102.5x10, 102.5x10, 102.5x9
-Leg press: 165.0x10, 165.0x10, 165.0x9
-Calf raises: 60x12, 60x12, 60x15
+2026-03-21 | good depth on squats
+Squat: 102.5x7, 102.5x7, 102.5x7, 102.5x5
+Romanian deadlift: 85.0x8, 85.0x8, 85.0x8
+Leg press: 125x9, 125x9, 125x9
+Calf raise: 65x13, 65x13, 65x13, 65x13

@@ -1,6 +1,6 @@
-2026-05-15 | back at it
-Bench press: 142.5x12, 142.5x12, 142.5x12, 142.5x11
-Overhead press: 112.5x12, 112.5x12, 112.5x11
-Barbell row: 132.5x12, 132.5x12, 132.5x12, 132.5x11
-Dumbbell curls: 8x12, 8x12, 8x11
-Tricep cable pushdown: 82.5x12, 82.5x12, 82.5x11
+2026-05-15 | strong day
+Bench press: 90.0x6, 90.0x6, 90.0x6, 90.0x6
+Overhead press: 57.5x7, 57.5x7, 57.5x7
+Barbell row: 80.0x9, 80.0x9, 80.0x9, 80.0x7
+Bicep curl: 12x11, 12x11, 12x11
+Tricep pushdown: 25.0x10, 25.0x10, 25.0x8

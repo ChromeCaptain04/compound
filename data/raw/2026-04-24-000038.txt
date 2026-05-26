@@ -1,6 +1,6 @@
-2026-04-24 | upper body
-Bench press: 127.5x12, 127.5x12, 127.5x12, 127.5x11
-Overhead press: 97.5x12, 97.5x12, 97.5x11
-Barbell row: 117.5x12, 117.5x12, 117.5x12, 117.5x11
-Bicep curls: 8x12, 8x12, 8x11
-Tricep pushdown: 67.5x12, 67.5x12, 67.5x11
+2026-04-24
+Bench press: 87.5x7, 87.5x7, 87.5x7, 87.5x6
+Overhead press: 55.0x7, 55.0x7, 55.0x6
+Barbell row: 80.0x7, 80.0x7, 80.0x7, 80.0x7
+Bicep curl: 10x13, 10x13, 10x13
+Tricep pushdown: 25.0x8, 25.0x8, 25.0x8

@@ -1,6 +1,6 @@
-2026-04-14 | shoulder a bit tight
-Bench press: 120.0x11, 120.0x11, 120.0x11, 120.0x10
-Overhead press: 90.0x11, 90.0x11, 90.0x10
-Barbell row: 110.0x12, 110.0x12, 110.0x12, 110.0x11
-Bicep curls: 8x12, 8x12, 8x11
-Tricep pushdown: 60.0x12, 60.0x12, 60.0x11
+2026-04-14 | felt strong
+Bench press: 85.0x9, 85.0x9, 85.0x9, 85.0x7
+Overhead press: 52.5x9, 52.5x9, 52.5x7
+Barbell row: 77.5x10, 77.5x10, 77.5x10, 77.5x8
+Bicep curl: 10x12, 10x12, 10x12
+Tricep pushdown: 22.5x13, 22.5x13, 22.5x13

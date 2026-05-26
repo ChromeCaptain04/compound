@@ -1,5 +1,5 @@
-2026-03-18 | hip flexors tight
-Squat: 120.0x7, 120.0x7, 120.0x7, 120.0x6
-Romanian deadlift: 100.0x10, 100.0x10, 100.0x9
-Leg press: 160.0x10, 160.0x10, 160.0x9
-Calf raises: 60x12, 60x12, 60x15
+2026-03-18 | leg press felt easy
+Squat: 102.5x6, 102.5x6, 102.5x6, 102.5x5
+Romanian deadlift: 82.5x11, 82.5x11, 82.5x9
+Leg press: 125x8, 125x8, 125x8
+Calf raise: 65x12, 65x12, 65x12, 65x12

@@ -1,5 +1,5 @@
-2026-04-29 | ATG squats
-Squat: 150.0x10, 150.0x10, 150.0x10, 150.0x9
-Romanian deadlift: 130.0x12, 130.0x12, 130.0x11
-Leg press: 220.0x12, 220.0x12, 220.0x11
-Calf raises: 60x12, 60x12, 60x15
+2026-04-29 | new squat weight
+Squat: 107.5x8, 107.5x8, 107.5x8, 107.5x8
+Romanian deadlift: 87.5x10, 87.5x10, 87.5x10
+Leg press: 130x11, 130x11, 130x10
+Calf raise: 65x17, 65x17, 65x17, 65x16

@@ -1,5 +1,5 @@
-2026-03-07 | lower body
-Squat: 112.5x6, 112.5x6, 112.5x6, 112.5x5
-Romanian deadlift: 92.5x9, 92.5x9, 92.5x8
-Leg press: 145.0x9, 145.0x9, 145.0x8
-Calf raises: 60x12, 60x12, 60x15
+2026-03-07 | new squat weight
+Squat: 100x8, 100x8, 100x8, 100x8
+Romanian deadlift: 82.5x9, 82.5x9, 82.5x9
+Leg press: 120x11, 120x11, 120x10
+Calf raise: 60x16, 60x16, 60x16, 60x15

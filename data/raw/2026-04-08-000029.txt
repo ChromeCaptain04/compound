@@ -1,5 +1,5 @@
-2026-04-08 | legs were fresh
-Squat: 135.0x8, 135.0x8, 135.0x8, 135.0x7
-Romanian deadlift: 115.0x11, 115.0x11, 115.0x10
-Leg press: 190.0x11, 190.0x11, 190.0x10
-Calf raises: 60x12, 60x12, 60x15
+2026-04-08 | new leg press weight
+Squat: 105.0x7, 105.0x7, 105.0x7, 105.0x6
+Romanian deadlift: 87.5x8, 87.5x8, 87.5x8
+Leg press: 130x8, 130x8, 130x8
+Calf raise: 65x14, 65x14, 65x14, 65x13

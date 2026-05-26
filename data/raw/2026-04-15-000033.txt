@@ -1,5 +1,5 @@
-2026-04-15 | quad dominant today
-Squat: 140.0x9, 140.0x9, 140.0x9, 140.0x8
-Romanian deadlift: 120.0x12, 120.0x12, 120.0x11
-Leg press: 200.0x12, 200.0x12, 200.0x11
-Calf raises: 60x12, 60x12, 60x15
+2026-04-15 | heavy squat day
+Squat: 105.0x8, 105.0x8, 105.0x8, 105.0x6
+Romanian deadlift: 87.5x8, 87.5x8, 87.5x8
+Leg press: 130x10, 130x10, 130x10
+Calf raise: 65x15, 65x15, 65x15, 65x15

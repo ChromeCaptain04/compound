@@ -1,6 +1,6 @@
-2026-05-12 | deload feel
-Bench press: 140.0x12, 140.0x12, 140.0x12, 140.0x11
-Overhead press: 110.0x12, 110.0x12, 110.0x11
-Barbell row: 130.0x12, 130.0x12, 130.0x12, 130.0x11
-Bicep curls: 8x12, 8x12, 8x11
-Tricep pushdown: 80.0x12, 80.0x12, 80.0x11
+2026-05-12
+Bench press: 87.5x9, 87.5x9, 87.5x9, 87.5x9
+Overhead press: 57.5x6, 57.5x6, 57.5x6
+Barbell row: 80.0x8, 80.0x8, 80.0x8, 80.0x7
+Bicep curl: 12x11, 12x11, 12x10
+Tricep pushdown: 25.0x9, 25.0x9, 25.0x8

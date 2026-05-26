@@ -1,6 +1,6 @@
-2026-04-03 | pbday
-Bench press: 112.5x10, 112.5x10, 112.5x10, 112.5x9
-Overhead press: 82.5x10, 82.5x10, 82.5x9
-Barbell row: 102.5x11, 102.5x11, 102.5x11, 102.5x10
-Bicep curls: 8x12, 8x12, 8x11
-Tricep pushdown: 52.5x12, 52.5x12, 52.5x11
+2026-04-03 | deload week feel
+Bench press: 85.0x6, 85.0x6, 85.0x6, 85.0x6
+Overhead press: 52.5x6, 52.5x6, 52.5x6
+Barbell row: 77.5x7, 77.5x7, 77.5x7, 77.5x7
+Bicep curl: 10x8, 10x8, 10x8
+Tricep pushdown: 22.5x9, 22.5x9, 22.5x8

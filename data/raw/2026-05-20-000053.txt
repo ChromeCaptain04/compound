@@ -1,5 +1,5 @@
-2026-05-20 | strong squat
-Squat: 165.0x11, 165.0x11, 165.0x11, 165.0x10
-Romanian deadlift: 145.0x12, 145.0x12, 145.0x11
-Leg press: 250.0x12, 250.0x12, 250.0x11
-Calf raises: 60x12, 60x12, 60x15
+2026-05-20 | quad doms from last session
+Squat: 112.5x5, 112.5x5, 112.5x5, 112.5x5
+Romanian deadlift: 90.0x10, 90.0x10, 90.0x9
+Leg press: 135x9, 135x9, 135x8
+Calf raise: 70x13, 70x13, 70x13, 70x12

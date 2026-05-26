@@ -1,6 +1,6 @@
-2026-05-19 | strong day
-Bench press: 145.0x12, 145.0x12, 145.0x12, 145.0x11
-Overhead press: 115.0x12, 115.0x12, 115.0x11
-Barbell row: 135.0x12, 135.0x12, 135.0x12, 135.0x11
-Bicep curls: 8x12, 8x12, 8x11
-Tricep pushdown: 85.0x12, 85.0x12, 85.0x11
+2026-05-19 | slight elbow tweak on curls
+Bench press: 90.0x7, 90.0x7, 90.0x7, 90.0x7
+Overhead press: 57.5x7, 57.5x7, 57.5x6
+Barbell row: 80.0x9, 80.0x9, 80.0x9, 80.0x7
+Bicep curl: 12x12, 12x12, 12x12
+Tricep pushdown: 25.0x11, 25.0x11, 25.0x10

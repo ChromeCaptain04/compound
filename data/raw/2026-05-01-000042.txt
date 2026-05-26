@@ -1,6 +1,6 @@
-2026-05-01 | fatigue from yesterday
-Bench press: 132.5x12, 132.5x12, 132.5x12, 132.5x11
-Overhead press: 102.5x12, 102.5x12, 102.5x11
-Barbell row: 122.5x12, 122.5x12, 122.5x12, 122.5x11
-Bicep curls: 8x12, 8x12, 8x11
-Tricep pushdown: 72.5x12, 72.5x12, 72.5x11
+2026-05-01 | bit tired from work
+Bench press: 87.5x6, 87.5x6, 87.5x6, 87.5x6
+Overhead press: 55.0x7, 55.0x7, 55.0x7
+Barbell row: 80.0x7, 80.0x7, 80.0x7, 80.0x7
+bicep curls: 12x8, 12x8, 12x8
+cable tricep pushdown: 25.0x8, 25.0x8, 25.0x8

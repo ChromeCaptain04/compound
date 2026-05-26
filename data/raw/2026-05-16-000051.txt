@@ -1,5 +1,5 @@
-2026-05-16 | quad doms incoming
-Squat: 162.5x11, 162.5x11, 162.5x11, 162.5x10
-Romanian deadlift: 142.5x12, 142.5x12, 142.5x11
-Leg press: 245.0x12, 245.0x12, 245.0x11
-Calf raises: 60x12, 60x12, 60x15
+2026-05-16
+Squat: 110.0x7, 110.0x7, 110.0x7, 110.0x6
+Romanian deadlift: 90.0x9, 90.0x9, 90.0x9
+Leg press: 135x8, 135x8, 135x8
+Calf raise: 70x12, 70x12, 70x12, 70x12

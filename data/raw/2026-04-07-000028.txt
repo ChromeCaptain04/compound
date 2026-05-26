@@ -1,6 +1,6 @@
-2026-04-07 | good session
-Bench press: 115.0x10, 115.0x10, 115.0x10, 115.0x9
-Overhead press: 85.0x10, 85.0x10, 85.0x9
-Barbell row: 105.0x11, 105.0x11, 105.0x11, 105.0x10
-Bicep curls: 8x12, 8x12, 8x11
-Tricep pushdown: 55.0x12, 55.0x12, 55.0x11
+2026-04-07 | back at full intensity
+Bench press: 85.0x7, 85.0x7, 85.0x7, 85.0x6
+Overhead press: 52.5x7, 52.5x7, 52.5x7
+Barbell row: 77.5x9, 77.5x9, 77.5x9, 77.5x7
+bicep curls: 10x10, 10x10, 10x8
+cable tricep pushdown: 22.5x11, 22.5x11, 22.5x11
