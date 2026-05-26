@@ -39,5 +39,9 @@
     "Standing dumbell curl",
     "Standing bicep curl",
     "Standing bicep curls"
+  ],
+  "Dumbell press": [
+    "Close grip dumbell press",
+    "Flat dumbell press"
   ]
 }
