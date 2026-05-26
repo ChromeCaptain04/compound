@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>COMPOUND INTEREST</title>
+  <title>COMPOUNDING</title>
 
   <!-- Chart.js + date-fns adapter for progress graphs -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
@@ -52,13 +52,7 @@
       --phase-pek: #D84315;
       /* Red   — sessions 17-24 */
 
-      /* Rep-range colours used in Progress graphs */
-      --rep-low: #1976D2;
-      /* 1-5 reps  — blue  (heavy) */
-      --rep-mid: #F57C00;
-      /* 6-8 reps  — amber (moderate) */
-      --rep-high: #43A047;
-      /* 9-20 reps — green (volume) */
+      /* Rep colours are now computed dynamically in JS via repColour() */
     }
 
     /* ── RESET & BASE ───────────────────────────────────────── */
@@ -775,7 +769,7 @@
      CONFIG SCREEN — shown on first visit; stores token locally
      ════════════════════════════════════════════════════════ -->
   <div id="config-screen">
-    <div class="config-title">Compound Interest</div>
+    <div class="config-title">Compounding</div>
     <div class="config-subtitle">Strength Training Tracker</div>
     <div class="config-card">
       <div>
@@ -785,7 +779,7 @@
       </div>
       <div>
         <label>Repository Name</label>
-        <input id="cfg-repo" type="text" placeholder="compound-interest" autocomplete="off" autocorrect="off"
+        <input id="cfg-repo" type="text" placeholder="Compounding" autocomplete="off" autocorrect="off"
           autocapitalize="off">
       </div>
       <div>
@@ -806,15 +800,14 @@
      ════════════════════════════════════════════════════════ -->
   <div id="app">
     <header>
-      <div class="logo" id="logo" onclick="handleLogoTap()">Compound Interest</div>
+      <div class="logo" id="logo" onclick="handleLogoTap()">Compounding</div>
       <div class="header-plus" id="header-plus" onclick="openRecord()">+</div>
     </header>
 
     <nav>
       <button class="active" onclick="switchTab('dashboard', this)">Dashboard</button>
-      <button onclick="switchTab('log', this)">Log</button>
       <button onclick="switchTab('progress', this)">Progress</button>
-      <button onclick="switchTab('record', this)">Record</button>
+      <button onclick="switchTab('log', this)">Log</button>
     </nav>
 
     <!-- ── DASHBOARD TAB ──────────────────────────────────────── -->
@@ -895,15 +888,13 @@
         </div>
       </div>
 
-      <!-- ── REPROCESS ARCHIVES ────────────────────────────── -->
+      <!-- ── SYSTEM ──────────────────────────────────────────── -->
       <div style="margin-top:2.5rem; border-top:1px solid var(--border); padding-top:1.5rem;">
         <div class="section-title">System</div>
         <div style="font-size:0.83rem;color:var(--muted);line-height:1.6;margin-bottom:1rem;">
-          Re-parse all raw text files and rebuild all JSON archives. Use after changing aliases or if data appears
-          incorrect.
+          Clear saved credentials and return to the login screen.
         </div>
-        <button class="btn-sm danger" onclick="triggerReprocess()">Reprocess Archives</button>
-        <div class="status-msg" id="reprocess-status"></div>
+        <button class="btn-sm danger" onclick="resetConfig()">Reconfigure</button>
       </div>
     </div>
 
@@ -937,7 +928,7 @@
 
     function saveConfig() {
       const u = document.getElementById('cfg-user').value.trim();
-      const r = document.getElementById('cfg-repo').value.trim() || 'compound-interest';
+      const r = document.getElementById('cfg-repo').value.trim() || 'Compounding';
       const t = document.getElementById('cfg-token').value.trim();
       if (!u || !t) { document.getElementById('cfg-status').className = 'status-msg err'; document.getElementById('cfg-status').textContent = 'Please fill in all fields.'; return; }
       CFG = { user: u, repo: r, branch: 'main', token: t };
@@ -952,7 +943,7 @@
           CFG = JSON.parse(s);
           if (CFG.user && CFG.token) {
             document.getElementById('cfg-user').value = CFG.user;
-            document.getElementById('cfg-repo').value = CFG.repo || 'compound-interest';
+            document.getElementById('cfg-repo').value = CFG.repo || 'Compounding';
             document.getElementById('cfg-token').value = CFG.token;
             enterApp();
           }
@@ -1269,7 +1260,7 @@
       const prestige = total === 0 ? 0 : Math.floor((total - 1) / 24);
       const current = total === 0 ? 0 : ((total - 1) % 24) + 1;
 
-      let html = `<div class="section-title" style="margin-top:2.5rem;">Cycle Tracker — Prestige ${prestige}</div>`;
+      let html = `<div class="section-title" style="margin-top:2.5rem;">Cycle Tracker</div>`;
       html += `<div class="cycle-wrap"><div class="tube-scroll"><div class="tube-map">`;
 
       for (let i = 0; i <= 24; i++) {
@@ -1478,11 +1469,27 @@
 
     let progressCharts = [];
 
-    // Rep range → colour
+    // Granular rep → colour mapping.
+    // Full spectrum: dark blue (1 rep / heaviest) → purple → red → orange → yellow-green (20 reps / highest volume)
+    // Uses a smooth HSL interpolation across the range 1–20.
     function repColour(reps) {
-      if (reps <= 5) return getComputedStyle(document.documentElement).getPropertyValue('--rep-low').trim() || '#1976D2';
-      if (reps <= 8) return getComputedStyle(document.documentElement).getPropertyValue('--rep-mid').trim() || '#F57C00';
-      return getComputedStyle(document.documentElement).getPropertyValue('--rep-high').trim() || '#43A047';
+      const r = Math.max(1, Math.min(reps, 20));
+      // Hue: 240 (blue) at 1 rep → 0/360 (red) at ~10 → 90 (yellow-green) at 20
+      // We map rep 1→20 onto hue 240→80 going backwards through the spectrum
+      const hue = Math.round(240 - (r - 1) * (160 / 19));
+      const sat = 75;
+      const lit = 42;
+      return `hsl(${hue},${sat}%,${lit}%)`;
+    }
+
+    // Build a compact inline colour key showing each rep count that appears in the data
+    function buildRepKey(repCounts) {
+      const sorted = [...new Set(repCounts)].sort((a, b) => a - b);
+      return sorted.map(r =>
+        `<span style="display:inline-flex;align-items:center;gap:3px;margin-right:8px;font-size:0.72rem;color:var(--muted);">
+      <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${repColour(r)};flex-shrink:0;"></span>${r}
+    </span>`
+      ).join('');
     }
 
     // For each exercise session, pick the "best" set:
@@ -1508,14 +1515,7 @@
       // Collect all exercise names (already normalised via aliases)
       const names = [...new Set(WORKOUTS.flatMap(w => w.exercises.map(e => e.name)))].sort();
 
-      const legend = `
-  <div class="rep-legend">
-    <div class="rep-legend-item"><div class="rep-swatch" style="background:var(--rep-low)"></div>1–5 reps (heavy)</div>
-    <div class="rep-legend-item"><div class="rep-swatch" style="background:var(--rep-mid)"></div>6–8 reps (moderate)</div>
-    <div class="rep-legend-item"><div class="rep-swatch" style="background:var(--rep-high)"></div>9+ reps (volume)</div>
-  </div>`;
-
-      let html = `<div class="section-title">Progress</div>${legend}`;
+      let html = `<div class="section-title">Progress</div>`;
 
       const toChart = [];
 
@@ -1533,9 +1533,15 @@
 
         if (!dataPoints.length) return;
 
+        // Build inline rep key for this exercise's actual rep counts
+        const repKey = buildRepKey(dataPoints.map(p => p.reps));
+
         html += `
     <div class="card progress-ex-block" style="margin-bottom:1.5rem;">
-      <div class="progress-ex-title">${name}</div>
+      <div style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--border);padding-bottom:0.5rem;margin-bottom:0.75rem;flex-wrap:wrap;gap:0.4rem;">
+        <div class="progress-ex-title" style="border:none;padding:0;margin:0;">${name}</div>
+        <div style="display:flex;flex-wrap:wrap;align-items:center;">${repKey}</div>
+      </div>
       <div class="chart-wrap"><canvas id="${cid}"></canvas></div>
     </div>`;
 
@@ -1549,10 +1555,6 @@
           const ctx = document.getElementById(cid);
           if (!ctx) return;
 
-          // Build scatter datasets grouped by rep range (for colour coding)
-          // We use a single scatter dataset with per-point colours via a workaround:
-          // build one dataset per point (expensive for many points) OR use a plugin.
-          // Simpler: use a single scatter dataset with pointBackgroundColor array.
           const pts = dataPoints.map(p => ({ x: new Date(p.date).getTime(), y: p.weight, reps: p.reps }));
 
           const chart = new Chart(ctx, {
@@ -1565,7 +1567,7 @@
                 pointRadius: 6,
                 pointHoverRadius: 8,
                 showLine: true,
-                borderColor: 'rgba(163,63,31,0.25)',
+                borderColor: 'rgba(163,63,31,0.2)',
                 borderWidth: 1.5,
                 tension: 0.1
               }]
