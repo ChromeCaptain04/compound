@@ -1,11 +1,4 @@
 {
-  "Tricep pushdown": [
-    "cable tricep pushdown",
-    "tricep pushdowns",
-    "Tricep cable pushdown",
-    "Tricep pushdown",
-    "Tricep pushdowns"
-  ],
   "Romanian deadlift": [
     "RDL",
     "Romanian DL"
@@ -43,5 +36,13 @@
   "Dumbell press": [
     "Close grip dumbell press",
     "Flat dumbell press"
+  ],
+  "Tricep pushdown": [
+    "cable tricep pushdown",
+    "tricep pushdowns",
+    "Tricep cable pushdown",
+    "Tricep pushdown",
+    "Tricep pushdowns",
+    "Triceps pushdowns"
   ]
 }
