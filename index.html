@@ -1469,17 +1469,35 @@
 
     let progressCharts = [];
 
-    // Granular rep → colour mapping.
-    // Full spectrum: dark blue (1 rep / heaviest) → purple → red → orange → yellow-green (20 reps / highest volume)
-    // Uses a smooth HSL interpolation across the range 1–20.
+    // Granular rep colour mapping.
+    // 20 hand-picked high-contrast colours. Adjacent rep counts (e.g. 10 vs 11) are
+    // mapped to very different hues so they are immediately distinguishable on the chart.
+    const REP_COLOURS = {
+      1: '#1a237e',  // deep navy
+      2: '#0077b6',  // ocean blue
+      3: '#00b4d8',  // cyan
+      4: '#2dc653',  // vivid green
+      5: '#006400',  // dark forest green
+      6: '#ccb800',  // golden yellow
+      7: '#ff7b00',  // vivid orange
+      8: '#e63946',  // red
+      9: '#9b2335',  // deep crimson
+      10: '#c77dff',  // lavender purple
+      11: '#6a0dad',  // deep purple
+      12: '#ff006e',  // hot pink
+      13: '#fb8500',  // amber
+      14: '#80b918',  // lime
+      15: '#007f5f',  // teal green
+      16: '#48cae4',  // sky blue
+      17: '#f72585',  // magenta
+      18: '#3a0ca3',  // indigo
+      19: '#b5838d',  // dusty rose
+      20: '#adb5bd',  // silver
+    };
+
     function repColour(reps) {
-      const r = Math.max(1, Math.min(reps, 20));
-      // Hue: 240 (blue) at 1 rep → 0/360 (red) at ~10 → 90 (yellow-green) at 20
-      // We map rep 1→20 onto hue 240→80 going backwards through the spectrum
-      const hue = Math.round(240 - (r - 1) * (160 / 19));
-      const sat = 75;
-      const lit = 42;
-      return `hsl(${hue},${sat}%,${lit}%)`;
+      const r = Math.max(1, Math.min(Math.round(reps), 20));
+      return REP_COLOURS[r] || '#888';
     }
 
     // Build a compact inline colour key showing each rep count that appears in the data
