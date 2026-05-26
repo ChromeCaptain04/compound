@@ -1528,7 +1528,7 @@
       }
 
       const reversed = [...WORKOUTS].reverse();
-      let html = `<div class="section-title">Workout Archive — ${WORKOUTS.length} sessions</div>`;
+      let html = `<div class="section-title">Workout Archive</div>`;
 
       html += reversed.map((w, ri) => {
         const num = WORKOUTS.length - ri;   // Count from total downward (latest = highest number)
@@ -1645,7 +1645,7 @@
           dataPoints.push({ date: w.date, weight: s.weight_kg, reps: s.reps });
         });
 
-        if (!dataPoints.length) return;
+        if (dataPoints.length < 4) return;  // skip exercises with fewer than 4 sessions
 
         // Build inline rep key for this exercise's actual rep counts
         const repKey = buildRepKey(dataPoints.map(p => p.reps));
