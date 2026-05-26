@@ -1016,13 +1016,15 @@
 
     async function loadAliasesFromGitHub() {
       try {
-        // Fetch metadata for the SHA (needed later to overwrite the file)
+        // Always use the Contents API to fetch aliases — it returns the live committed
+        // version directly, bypassing the raw.githubusercontent.com CDN cache that can
+        // serve stale data for up to several minutes after a write.
         const meta = await ghGet('data/aliases.json');
         ALIAS_SHA = meta.sha;
-        // Fetch actual content via download_url — fast, no base64 decoding needed
-        const r = await fetch(meta.download_url);
-        if (!r.ok) throw new Error(r.status);
-        ALIASES = await r.json();
+        // Content is base64-encoded in the API response — decode with TextDecoder
+        ALIASES = JSON.parse(new TextDecoder().decode(
+          Uint8Array.from(atob(meta.content.replace(/\n/g, '')), ch => ch.charCodeAt(0))
+        ));
       } catch (e) {
         // File doesn't exist yet — start empty
         ALIASES = {};
@@ -1072,10 +1074,13 @@
       st.className = 'status-msg'; st.textContent = 'Saving aliases…';
       try {
         const res = await ghPut('data/aliases.json', 'update: exercise aliases', JSON.stringify(ALIASES, null, 2), ALIAS_SHA);
+        // Update SHA so the next save has the correct base — no re-fetch needed
         ALIAS_SHA = res.content.sha;
-        st.className = 'status-msg ok'; st.textContent = '✓ Aliases saved.';
-        // Reload data so normalisation picks up new aliases
+        st.className = 'status-msg ok'; st.textContent = '✓ Saved. Reprocessing…';
+        // ALIASES is already correct in memory (we just committed it), so go straight
+        // to reprocessing workouts — no re-fetch required, bypassing CDN cache entirely.
         await loadAllData();
+        st.className = 'status-msg ok'; st.textContent = '✓ Aliases saved and applied.';
       } catch (e) {
         st.className = 'status-msg err'; st.textContent = '✗ ' + e.message;
       }
