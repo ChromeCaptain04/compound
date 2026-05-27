@@ -1094,6 +1094,7 @@
 
     let WORKOUTS = [];   // All strength workouts, sorted ascending by date
     let BODYWEIGHT = [];   // [{date, weight}] sorted ascending
+    let RAW_META = {};   // Maps workout index → { path, sha } for deletion
 
     // Parse shorthand text into a workout object (or bodyweight entry)
     function parseEntry(text) {
@@ -1195,20 +1196,31 @@
 
         // 2. Fetch all file contents in parallel via raw.githubusercontent.com URLs.
         //    These don't count against the authenticated API rate limit.
-        const entries = await Promise.all(rawFiles.map(async f => {
+        const rawResults = await Promise.all(rawFiles.map(async f => {
           try {
             const r = await fetch(f.download_url);
             if (!r.ok) return null;
             const text = await r.text();
-            return parseEntry(text);
+            const entry = parseEntry(text);
+            // Attach the file path so we can delete it later if needed.
+            // SHA is fetched on demand at delete time (always fresh, avoids stale cache).
+            if (entry) entry._path = f.path;
+            return entry;
           } catch (e) { return null; }
         }));
 
         // 3. Separate workouts from bodyweight entries
-        WORKOUTS = entries.filter(e => e && e.type === 'workout').sort((a, b) => a.date.localeCompare(b.date));
-        BODYWEIGHT = entries.filter(e => e && e.type === 'bodyweight').sort((a, b) => a.date.localeCompare(b.date));
+        const allEntries = rawResults.filter(Boolean);
+        WORKOUTS = allEntries.filter(e => e.type === 'workout').sort((a, b) => a.date.localeCompare(b.date));
+        BODYWEIGHT = allEntries.filter(e => e.type === 'bodyweight').sort((a, b) => a.date.localeCompare(b.date));
+        // Build path lookup keyed by workout index (after sort) for deletion
+        RAW_META = {};
+        WORKOUTS.forEach((w, i) => { if (w._path) RAW_META[i] = { path: w._path }; });
 
-        // 4. Check for unrecognised exercise names that are suspiciously close
+        // 4. Compute all-time PRs (best weight, tie-broken by reps) per exercise
+        computePRs();
+
+        // 5. Check for unrecognised exercise names that are suspiciously close
         //    to known canonical names (Levenshtein distance ≤ 2). Surfaces typos
         //    like "Squats" vs "Squat" that haven't been aliased yet.
         detectSuspectNames();
@@ -1279,17 +1291,6 @@
       }
     }
 
-    // Reprocess: re-read all raw files and refresh UI
-    async function triggerReprocess() {
-      const el = document.getElementById('reprocess-status');
-      el.className = 'status-msg'; el.textContent = 'Reprocessing…';
-      try {
-        await loadAllData();
-        el.className = 'status-msg ok'; el.textContent = '✓ Reprocessed.';
-      } catch (e) {
-        el.className = 'status-msg err'; el.textContent = '✗ ' + e.message;
-      }
-    }
 
     // ──────────────────────────────────────────────────────────────
     // SET CHIP HELPER
@@ -1412,6 +1413,37 @@
     }
 
     // ──────────────────────────────────────────────────────────────
+    // PERSONAL RECORDS
+    // Keyed by exercise name → { weight_kg, reps, date }
+    // Computed after every data load. A PR = highest weight ever
+    // lifted for that exercise; ties broken by most reps.
+    // ──────────────────────────────────────────────────────────────
+
+    let ALL_TIME_PRS = {};  // { "Bench press": { weight_kg, reps, date }, ... }
+
+    function computePRs() {
+      ALL_TIME_PRS = {};
+      WORKOUTS.forEach(w => {
+        w.exercises.forEach(ex => {
+          const s = bestSet(ex.sets);
+          const cur = ALL_TIME_PRS[ex.name];
+          if (!cur
+            || s.weight_kg > cur.weight_kg
+            || (s.weight_kg === cur.weight_kg && s.reps > cur.reps)) {
+            ALL_TIME_PRS[ex.name] = { weight_kg: s.weight_kg, reps: s.reps, date: w.date };
+          }
+        });
+      });
+    }
+
+    // Returns true if a given set matches the all-time PR for that exercise
+    function isPR(exName, set) {
+      const pr = ALL_TIME_PRS[exName];
+      if (!pr) return false;
+      return set.weight_kg === pr.weight_kg && set.reps === pr.reps;
+    }
+
+    // ──────────────────────────────────────────────────────────────
     // UNRECOGNISED NAME DETECTION
     // After loading, find exercise names that look like near-duplicates
     // of each other (edit distance ≤ 2) but aren't aliased — likely typos.
@@ -1474,12 +1506,19 @@
         const totalVol = Math.round(WORKOUTS.reduce((t, w) => t + workoutVolume(w), 0));
         const weekVol = Math.round(WORKOUTS.filter(w => isThisWeek(w.date)).reduce((t, w) => t + workoutVolume(w), 0));
 
-        // Latest workout card
-        const exHTML = last.exercises.map(ex => `
+        // Latest workout card — PR sets get a gold ★ chip
+        const exHTML = last.exercises.map(ex => {
+          const prSet = ALL_TIME_PRS[ex.name];
+          const hasPR = prSet && ex.sets.some(s => s.weight_kg === prSet.weight_kg && s.reps === prSet.reps);
+          const prBadge = hasPR
+            ? `<span style="font-size:0.72rem;color:#B8860B;font-weight:bold;letter-spacing:0.05em;margin-left:0.4rem;">&#9733; PR</span>`
+            : '';
+          return `
       <div class="exercise-row">
-        <div class="ex-name">${ex.name}</div>
+        <div class="ex-name">${ex.name}${prBadge}</div>
         <div class="sets-row">${chips(ex.sets)}</div>
-      </div>`).join('');
+      </div>`;
+        }).join('');
 
         html += `
     <div class="section-title">Latest Session</div>
@@ -1518,6 +1557,51 @@
     }
 
     // ──────────────────────────────────────────────────────────────
+    // SESSION DELETION
+    // Fetches fresh SHA from Contents API (bypasses CDN), then sends
+    // a DELETE request to remove the raw file from the repo.
+    // ──────────────────────────────────────────────────────────────
+
+    function confirmDelete(idx) {
+      const w = WORKOUTS[idx];
+      if (!w) return;
+      const label = `${w.date}${w.notes ? ' — ' + w.notes.slice(0, 40) : ''}`;
+      if (!confirm(`Delete session "${label}"?\n\nThis removes the raw file from GitHub and cannot be undone.`)) return;
+      deleteSession(idx);
+    }
+
+    async function deleteSession(idx) {
+      const meta = RAW_META[idx];
+      if (!meta) { alert('Cannot find file path for this session.'); return; }
+
+      // Disable all delete buttons while in flight
+      document.querySelectorAll('.btn-sm').forEach(b => b.disabled = true);
+
+      try {
+        // Always fetch fresh SHA via Contents API — never trust cached values for deletes
+        const fileMeta = await ghGet(meta.path);
+        const sha = fileMeta.sha;
+
+        const res = await fetch(`${API()}/contents/${meta.path}`, {
+          method: 'DELETE',
+          headers: HDR(),
+          body: JSON.stringify({
+            message: `delete: session ${WORKOUTS[idx].date}`,
+            sha,
+            branch: CFG.branch || 'main'
+          })
+        });
+        if (!res.ok) throw new Error((await res.json()).message || 'Delete failed');
+
+        // Reload everything after a short pause for GitHub to propagate
+        setTimeout(() => loadAllData(), 1500);
+      } catch (e) {
+        alert('Delete failed: ' + e.message);
+        document.querySelectorAll('.btn-sm').forEach(b => b.disabled = false);
+      }
+    }
+
+    // ──────────────────────────────────────────────────────────────
     // LOG TAB — chronological archive of all workouts
     // ──────────────────────────────────────────────────────────────
 
@@ -1539,15 +1623,21 @@
         <div class="sets-row">${chips(ex.sets)}</div>
       </div>`).join('');
 
+        // originalIndex = index in the sorted WORKOUTS array (reversed display, so subtract)
+        const origIdx = WORKOUTS.length - 1 - ri;
         return `
-    <div class="all-session-block">
+    <div class="all-session-block" id="session-block-${origIdx}">
       <div class="all-session-hdr">
         <div class="all-session-left">
           <div class="all-wnum">#${num}</div>
           <div class="all-session-date">${w.date}</div>
           ${isLast ? `<span class="recency-latest">Latest</span>` : ''}
         </div>
-        <div class="plain-tag">Strength</div>
+        <div style="display:flex;align-items:center;gap:0.75rem;">
+          <div class="plain-tag">Strength</div>
+          <button class="btn-sm ghost" style="font-size:0.72rem;padding:0.3rem 0.6rem;color:var(--danger);border-color:var(--danger);"
+            onclick="confirmDelete(${origIdx})">Delete</button>
+        </div>
       </div>
       <div class="all-session-body">
         ${exHTML}
@@ -1626,17 +1716,11 @@
         return;
       }
 
-      // Collect all exercise names (already normalised via aliases)
-      const names = [...new Set(WORKOUTS.flatMap(w => w.exercises.map(e => e.name)))].sort();
+      // Collect all exercise names and their data points
+      const names = [...new Set(WORKOUTS.flatMap(w => w.exercises.map(e => e.name)))];
 
-      let html = `<div class="section-title">Progress</div>`;
-
-      const toChart = [];
-
-      names.forEach(name => {
-        const cid = `prog-${name.replace(/[^a-z0-9]/gi, '-').toLowerCase()}`;
-
-        // Gather one data point per workout session that contains this exercise
+      // Build dataPoints for every exercise
+      const exerciseData = names.map(name => {
         const dataPoints = [];
         WORKOUTS.forEach(w => {
           const ex = w.exercises.find(e => e.name === name);
@@ -1644,10 +1728,27 @@
           const s = bestSet(ex.sets);
           dataPoints.push({ date: w.date, weight: s.weight_kg, reps: s.reps });
         });
+        return { name, dataPoints };
+      });
 
-        if (dataPoints.length < 4) return;  // skip exercises with fewer than 4 sessions
+      // Sort by dataPoints descending (most-logged exercises first),
+      // with ties broken alphabetically
+      exerciseData.sort((a, b) =>
+        b.dataPoints.length - a.dataPoints.length || a.name.localeCompare(b.name)
+      );
 
-        // Build inline rep key for this exercise's actual rep counts
+      // Split into chartable (>=4) and pending (<4)
+      const chartable = exerciseData.filter(e => e.dataPoints.length >= 4);
+      const pending = exerciseData.filter(e => e.dataPoints.length < 4)
+        .sort((a, b) => b.dataPoints.length - a.dataPoints.length || a.name.localeCompare(b.name));
+
+      let html = `<div class="section-title">Progress</div>`;
+
+      const toChart = [];
+
+      // ── Charts (exercises with >=4 sessions) ──────────────────
+      chartable.forEach(({ name, dataPoints }) => {
+        const cid = `prog-${name.replace(/[^a-z0-9]/gi, '-').toLowerCase()}`;
         const repKey = buildRepKey(dataPoints.map(p => p.reps));
 
         html += `
@@ -1662,6 +1763,24 @@
         toChart.push({ cid, dataPoints, name });
       });
 
+      // ── Pending exercises (fewer than 4 sessions) — text list at bottom ──
+      if (pending.length) {
+        html += `<div class="section-title" style="margin-top:2rem;">In Progress</div>`;
+        html += `<div class="card" style="padding:0.75rem 1.25rem;">`;
+        html += pending.map(({ name, dataPoints }) => {
+          const needed = 4 - dataPoints.length;
+          const done = dataPoints.length;
+          return `
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:0.6rem 0;border-bottom:1px solid var(--border);">
+        <div style="font-size:0.9rem;font-weight:bold;">${name}</div>
+        <div style="font-size:0.75rem;color:var(--muted);font-weight:bold;text-transform:uppercase;letter-spacing:0.05em;">
+          ${done}/4 &nbsp;·&nbsp; ${needed} more session${needed > 1 ? 's' : ''} to chart
+        </div>
+      </div>`;
+        }).join('');
+        html += `</div>`;
+      }
+
       document.getElementById('progress-content').innerHTML = html;
 
       requestAnimationFrame(() => {
@@ -1671,20 +1790,38 @@
 
           const pts = dataPoints.map(p => ({ x: new Date(p.date).getTime(), y: p.weight, reps: p.reps }));
 
+          // Find the PR point for this exercise to overlay a star marker
+          const pr = ALL_TIME_PRS[name];
+          const prPts = pr ? pts.filter(p => p.y === pr.weight_kg && p.reps === pr.reps) : [];
+
           const chart = new Chart(ctx, {
             type: 'scatter',
             data: {
-              datasets: [{
-                data: pts,
-                pointBackgroundColor: pts.map(p => repColour(p.reps)),
-                pointBorderColor: pts.map(p => repColour(p.reps)),
-                pointRadius: 6,
-                pointHoverRadius: 8,
-                showLine: true,
-                borderColor: 'rgba(163,63,31,0.2)',
-                borderWidth: 1.5,
-                tension: 0.1
-              }]
+              datasets: [
+                {
+                  // Main data series
+                  data: pts,
+                  pointBackgroundColor: pts.map(p => repColour(p.reps)),
+                  pointBorderColor: pts.map(p => repColour(p.reps)),
+                  pointRadius: 6,
+                  pointHoverRadius: 8,
+                  showLine: true,
+                  borderColor: 'rgba(163,63,31,0.2)',
+                  borderWidth: 1.5,
+                  tension: 0.1
+                },
+                {
+                  // PR overlay — gold star ring around the PR point(s)
+                  data: prPts,
+                  pointBackgroundColor: 'transparent',
+                  pointBorderColor: '#B8860B',
+                  pointBorderWidth: 2.5,
+                  pointRadius: 10,
+                  pointHoverRadius: 12,
+                  showLine: false,
+                  label: 'PR'
+                }
+              ]
             },
             options: {
               responsive: true,
