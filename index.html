@@ -1329,22 +1329,26 @@
         el.innerHTML = `<div class="card-sub" style="padding:0.5rem 0;">No master exercises defined.</div>`;
         return;
       }
+      // Only show reorder arrows and delete button when the editor is open
+      const editing = document.getElementById('master-editor')?.style.display !== 'none';
       el.innerHTML = MASTER_EXERCISES.map((name, i) => `
     <div class="alias-row">
+      ${editing ? `
       <div style="display:flex;gap:0.5rem;margin-right:0.5rem;flex-shrink:0;">
         <span style="cursor:pointer;color:var(--muted);padding:0 0.2rem;user-select:none;"
           onclick="moveMasterExercise(${i}, -1)" title="Move up">↑</span>
         <span style="cursor:pointer;color:var(--muted);padding:0 0.2rem;user-select:none;"
           onclick="moveMasterExercise(${i},  1)" title="Move down">↓</span>
-      </div>
+      </div>` : ''}
       <div class="alias-master" style="flex:1;">${name}</div>
-      <div class="alias-delete" onclick="removeMasterExercise(${i})">✕</div>
+      ${editing ? `<div class="alias-delete" onclick="removeMasterExercise(${i})">✕</div>` : ''}
     </div>`).join('');
     }
 
     function toggleMasterEditor() {
       const ed = document.getElementById('master-editor');
       ed.style.display = ed.style.display === 'none' ? 'block' : 'none';
+      renderMasterList();  // re-render to show/hide controls
     }
 
     function addMasterExercise() {
