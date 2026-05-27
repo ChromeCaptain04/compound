@@ -1,4 +1,4 @@
-# Compounding — Strength Training Tracker
+# Compound — Strength Training Tracker
 
 A single-file (`index.html`) strength training website designed to be **easily maintained by AI assistants**. No build tools, no backend, no hidden complexity — just a plain HTML file, a GitHub repo for data storage, and your phone's notes app.
 
@@ -19,7 +19,7 @@ A single-file (`index.html`) strength training website designed to be **easily m
 
 ### 1. Create the GitHub Repository
 
-1. Go to [github.com/new](https://github.com/new) and create a repository named `Compounding` (or any name you prefer).
+1. Go to [github.com/new](https://github.com/new) and create a repository named `Compound` (or any name you prefer).
 2. You don't need to initialise it with any files — the website will create them as needed.
 
 ### 2. Generate a Personal Access Token
@@ -36,7 +36,7 @@ Enable **GitHub Pages** on your repo:
 1. Upload `index.html` to your repo root.
 2. Go to **Settings → Pages → Source → Deploy from branch → `main` / `root`**.
 3. Make a small commit (e.g. add a blank line to README) to trigger the first build.
-4. Your site will be at `https://<your-username>.github.io/Compounding/`.
+4. Your site will be at `https://<your-username>.github.io/Compound/`.
 
 Alternatively, open `index.html` directly in any browser — it works locally too.
 
@@ -45,7 +45,7 @@ Alternatively, open `index.html` directly in any browser — it works locally to
 Open the website. You'll see a login screen:
 
 - **GitHub Username** — your GitHub username (case-sensitive).
-- **Repository Name** — the repo you created (default: `Compounding`).
+- **Repository Name** — the repo you created (default: `Compound`).
 - **Personal Access Token** — the token you just generated.
 
 Click **Enter**. Your credentials are stored in `localStorage` (never sent anywhere except GitHub's API).
@@ -131,7 +131,7 @@ Accessible via the **+** in the header:
 
 ### Exercise History (secret)
 
-Double-tap the **Compounding** logo in the header. This shows the **last 3 sessions** for every exercise, alphabetically, with sets and dates. Tap **Return** to go back.
+Double-tap the **Compound** logo in the header. This shows the **last 3 sessions** for every exercise, alphabetically, with sets and dates. Tap **Return** to go back.
 
 ---
 
@@ -163,7 +163,7 @@ Aliases are stored in `data/aliases.json`. After saving, all data is re-parsed w
 ## Data Layout in Your Repository
 
 ```
-Compounding/
+Compound/
 ├── index.html              ← The entire website
 ├── README.md
 └── data/

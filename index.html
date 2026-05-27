@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>COMPOUNDING</title>
+  <title>COMPOUND</title>
 
   <!-- Chart.js + date-fns adapter for progress graphs -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
@@ -769,7 +769,7 @@
      CONFIG SCREEN — shown on first visit; stores token locally
      ════════════════════════════════════════════════════════ -->
   <div id="config-screen">
-    <div class="config-title">Compounding</div>
+    <div class="config-title">Compound</div>
     <div class="config-subtitle">Strength Training Tracker</div>
     <div class="config-card">
       <div>
@@ -779,7 +779,7 @@
       </div>
       <div>
         <label>Repository Name</label>
-        <input id="cfg-repo" type="text" placeholder="Compounding" autocomplete="off" autocorrect="off"
+        <input id="cfg-repo" type="text" placeholder="Compound" autocomplete="off" autocorrect="off"
           autocapitalize="off">
       </div>
       <div>
@@ -800,7 +800,7 @@
      ════════════════════════════════════════════════════════ -->
   <div id="app">
     <header>
-      <div class="logo" id="logo" onclick="handleLogoTap()">Compounding</div>
+      <div class="logo" id="logo" onclick="handleLogoTap()">Compound</div>
       <div class="header-plus" id="header-plus" onclick="openRecord()">+</div>
     </header>
 
@@ -933,7 +933,7 @@
 
     function saveConfig() {
       const u = document.getElementById('cfg-user').value.trim();
-      const r = document.getElementById('cfg-repo').value.trim() || 'Compounding';
+      const r = document.getElementById('cfg-repo').value.trim() || 'Compound';
       const t = document.getElementById('cfg-token').value.trim();
       if (!u || !t) { document.getElementById('cfg-status').className = 'status-msg err'; document.getElementById('cfg-status').textContent = 'Please fill in all fields.'; return; }
       CFG = { user: u, repo: r, branch: 'main', token: t };
@@ -948,7 +948,7 @@
           CFG = JSON.parse(s);
           if (CFG.user && CFG.token) {
             document.getElementById('cfg-user').value = CFG.user;
-            document.getElementById('cfg-repo').value = CFG.repo || 'Compounding';
+            document.getElementById('cfg-repo').value = CFG.repo || 'Compound';
             document.getElementById('cfg-token').value = CFG.token;
             enterApp();
           }
