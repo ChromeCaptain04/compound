@@ -1217,10 +1217,7 @@
         RAW_META = {};
         WORKOUTS.forEach((w, i) => { if (w._path) RAW_META[i] = { path: w._path }; });
 
-        // 4. Compute all-time PRs (best weight, tie-broken by reps) per exercise
-        computePRs();
-
-        // 5. Check for unrecognised exercise names that are suspiciously close
+        // 4. Check for unrecognised exercise names that are suspiciously close
         //    to known canonical names (Levenshtein distance ≤ 2). Surfaces typos
         //    like "Squats" vs "Squat" that haven't been aliased yet.
         detectSuspectNames();
@@ -1413,37 +1410,6 @@
     }
 
     // ──────────────────────────────────────────────────────────────
-    // PERSONAL RECORDS
-    // Keyed by exercise name → { weight_kg, reps, date }
-    // Computed after every data load. A PR = highest weight ever
-    // lifted for that exercise; ties broken by most reps.
-    // ──────────────────────────────────────────────────────────────
-
-    let ALL_TIME_PRS = {};  // { "Bench press": { weight_kg, reps, date }, ... }
-
-    function computePRs() {
-      ALL_TIME_PRS = {};
-      WORKOUTS.forEach(w => {
-        w.exercises.forEach(ex => {
-          const s = bestSet(ex.sets);
-          const cur = ALL_TIME_PRS[ex.name];
-          if (!cur
-            || s.weight_kg > cur.weight_kg
-            || (s.weight_kg === cur.weight_kg && s.reps > cur.reps)) {
-            ALL_TIME_PRS[ex.name] = { weight_kg: s.weight_kg, reps: s.reps, date: w.date };
-          }
-        });
-      });
-    }
-
-    // Returns true if a given set matches the all-time PR for that exercise
-    function isPR(exName, set) {
-      const pr = ALL_TIME_PRS[exName];
-      if (!pr) return false;
-      return set.weight_kg === pr.weight_kg && set.reps === pr.reps;
-    }
-
-    // ──────────────────────────────────────────────────────────────
     // UNRECOGNISED NAME DETECTION
     // After loading, find exercise names that look like near-duplicates
     // of each other (edit distance ≤ 2) but aren't aliased — likely typos.
@@ -1506,19 +1472,12 @@
         const totalVol = Math.round(WORKOUTS.reduce((t, w) => t + workoutVolume(w), 0));
         const weekVol = Math.round(WORKOUTS.filter(w => isThisWeek(w.date)).reduce((t, w) => t + workoutVolume(w), 0));
 
-        // Latest workout card — PR sets get a gold ★ chip
-        const exHTML = last.exercises.map(ex => {
-          const prSet = ALL_TIME_PRS[ex.name];
-          const hasPR = prSet && ex.sets.some(s => s.weight_kg === prSet.weight_kg && s.reps === prSet.reps);
-          const prBadge = hasPR
-            ? `<span style="font-size:0.72rem;color:#B8860B;font-weight:bold;letter-spacing:0.05em;margin-left:0.4rem;">&#9733; PR</span>`
-            : '';
-          return `
+        // Latest workout card
+        const exHTML = last.exercises.map(ex => `
       <div class="exercise-row">
-        <div class="ex-name">${ex.name}${prBadge}</div>
+        <div class="ex-name">${ex.name}</div>
         <div class="sets-row">${chips(ex.sets)}</div>
-      </div>`;
-        }).join('');
+      </div>`).join('');
 
         html += `
     <div class="section-title">Latest Session</div>
@@ -1790,38 +1749,20 @@
 
           const pts = dataPoints.map(p => ({ x: new Date(p.date).getTime(), y: p.weight, reps: p.reps }));
 
-          // Find the PR point for this exercise to overlay a star marker
-          const pr = ALL_TIME_PRS[name];
-          const prPts = pr ? pts.filter(p => p.y === pr.weight_kg && p.reps === pr.reps) : [];
-
           const chart = new Chart(ctx, {
             type: 'scatter',
             data: {
-              datasets: [
-                {
-                  // Main data series
-                  data: pts,
-                  pointBackgroundColor: pts.map(p => repColour(p.reps)),
-                  pointBorderColor: pts.map(p => repColour(p.reps)),
-                  pointRadius: 6,
-                  pointHoverRadius: 8,
-                  showLine: true,
-                  borderColor: 'rgba(163,63,31,0.2)',
-                  borderWidth: 1.5,
-                  tension: 0.1
-                },
-                {
-                  // PR overlay — gold star ring around the PR point(s)
-                  data: prPts,
-                  pointBackgroundColor: 'transparent',
-                  pointBorderColor: '#B8860B',
-                  pointBorderWidth: 2.5,
-                  pointRadius: 10,
-                  pointHoverRadius: 12,
-                  showLine: false,
-                  label: 'PR'
-                }
-              ]
+              datasets: [{
+                data: pts,
+                pointBackgroundColor: pts.map(p => repColour(p.reps)),
+                pointBorderColor: pts.map(p => repColour(p.reps)),
+                pointRadius: 6,
+                pointHoverRadius: 8,
+                showLine: true,
+                borderColor: 'rgba(163,63,31,0.2)',
+                borderWidth: 1.5,
+                tension: 0.1
+              }]
             },
             options: {
               responsive: true,
