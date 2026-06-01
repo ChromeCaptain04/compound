@@ -22,9 +22,6 @@
   "Hexbar deadlifts": [
     "Deficit hexbar deadlifts"
   ],
-  "Dumbell lateral raise": [
-    "Dumbell lateral raises"
-  ],
   "Standing dumbell curls": [
     "Standing dumbell curl",
     "Standing bicep curl",
@@ -49,5 +46,10 @@
   "Dumbbell press": [
     "Close grip dumbell press",
     "Flat dumbell press"
+  ],
+  "Dumbbell lateral raise": [
+    "Dumbell lateral raise",
+    "dumbell lateral raises",
+    "dumbbell lateral raises"
   ]
 }
