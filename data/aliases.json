@@ -30,10 +30,6 @@
     "Standing bicep curl",
     "Standing bicep curls"
   ],
-  "Dumbell press": [
-    "Close grip dumbell press",
-    "Flat dumbell press"
-  ],
   "Tricep pushdown": [
     "cable tricep pushdown",
     "tricep pushdowns",
@@ -49,5 +45,9 @@
   "Seated dumbbell curls": [
     "Seated dumbell curls",
     "Seated dumbell curl"
+  ],
+  "Dumbbell press": [
+    "Close grip dumbell press",
+    "Flat dumbell press"
   ]
 }
