@@ -23,11 +23,6 @@
   "Hexbar deadlifts": [
     "Deficit hexbar deadlifts"
   ],
-  "Standing dumbell curls": [
-    "Standing dumbell curl",
-    "Standing bicep curl",
-    "Standing bicep curls"
-  ],
   "Tricep pushdown": [
     "cable tricep pushdown",
     "tricep pushdowns",
@@ -52,5 +47,11 @@
     "Dumbell lateral raise",
     "dumbell lateral raises",
     "dumbbell lateral raises"
+  ],
+  "Standing dumbbell curls": [
+    "Standing dumbell curls",
+    "Standing dumbell curl",
+    "Standing bicep curl",
+    "Standing bicep curls"
   ]
 }
