@@ -1,15 +1,15 @@
 [
-  "Incline dumbbell press",
-  "Bench press",
-  "Seated dumbbell curls",
-  "Chin ups",
-  "Wrist curls",
-  "Tricep pushdown",
-  "Deadlift",
-  "Dumbbell lateral raise",
   "Dumbbell press",
+  "Chin ups",
+  "Seated dumbbell curls",
+  "Deadlift",
+  "Wrist curls",
+  "Bench press",
+  "Tricep pushdown",
+  "Dumbbell lateral raise",
   "Romanian Deadlift",
   "Squat",
   "Seated row",
-  "Reverse wrist curls"
+  "Reverse wrist curls",
+  "Incline dumbbell press"
 ]
